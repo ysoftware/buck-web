@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<link rel="icon" href="favicon.png" type="image/x-icon" />
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+	<!-- Scatter -->
+	<script src="include/scatterjs-core.min.js"></script>
+	<script src="include/scatterjs-plugin-eosjs.min.js"></script>
+
+	<!-- EOS -->
+	<script src="include/eos.min.js"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="include/bootstrap.min.css">
+
+	<!-- Optional JavaScript -->
+	<script type="text/javascript" src="include/bignumber.min.js"></script>
+	<script src="include/jquery-3.3.1.slim.min.js"></script>
+	<script src="include/jquery-dateformat.js"></script>
+	<script src="include/popper.min.js"></script>
+	<script src="include/bootstrap.min.js"></script>
+
+	<!-- Main -->
+	<script type="text/javascript" src="setup.js"></script>
+	<script type="text/javascript" src="math.js"></script>
+	<script type="text/javascript" src="chain.js"></script>
+	<script type="text/javascript" src="database.js"></script>
+	<script type="text/javascript" src="methods.js"></script>
+	<script type="text/javascript" src="actions.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+	<script type="text/javascript" src="login.js"></script>
+	<link rel="stylesheet" href="index.css">
+
+	<title>BUCK Protocol User Interface</title>
+	</head>
+
+	<body>
+
+	<!-- Modal -->
+	<div class="modal fade" id="modal_dialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="modal_title">Modal title</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body" id="modal_body">
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
+			<button type="button" id="modal_button" class="btn btn-primary">Confirm</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<!-- Layout -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+		<button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+		<ul class="navbar-nav mr-auto"><a class="navbar-brand" href="#">BUCK Protocol</a></ul>
+
+		<span class="ml-auto mr-0">
+			<span class="navbar-text text-white-50 mr-3" id="top_eos_price"></span>
+			<span id="account_info" hidden>
+				<span class="navbar-text text-white-50 mr-3" id="top_buck_balance"></span>
+				<span class="navbar-text text-white-50 mr-3" id="top_savings_balance" hidden></span>
+				<span class="navbar-text text-white-50 mr-3" id="top_fund_balance"></span>
+				<span class="navbar-text text-white-50 mr-3" id="username_label"></span>
+			</span>
+		</span>
+
+		<div class="collapse navbar-collapse" style="max-width: 70px;" id="navbarTogglerDemo01">
+			<ul class="navbar-nav mr-0 ml-auto">
+				<li class="nav-item">&nbsp;</li>
+				<li class="nav-item">
+					<button type="button" class="btn btn-sm btn-outline-secondary" id="login_button"
+					onclick="login()">…</button>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div id="alerts" class="position-absolute mr-4" style="position: absolute; z-index: 1; width: 40%; right: 0;"></div> 
+
+		<div class="row mt-4 mb-4">
+			<div class="col-2 mr-2 mb-5" style="width: 190px; min-width: 190px;">
+				<ul class="list-group list-group-mine dark" id="menu_items">
+					<button type="button" id="info" onclick="menu_select(this);reload_page()"
+						class="list-group-item list-group-item-dark list-group-item-action"
+						>Info</button>
+						<div id="logged_in_actions" hidden>
+							<button type="button" id="transfer" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>Transfer</button>
+							<button type="button" id="funds" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>Funds</button>
+							<button type="button" id="cdps" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>My CDPs</button>
+							<button type="button" id="open" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>Open CDP</button>
+							<button type="button" id="savings" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark list-group-item-action"
+								>Savings</button>
+							<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>Exchange</button>
+						</div>
+				</ul>
+			</div>
+			
+			<div class="col">
+
+				<!-- Info -->
+				<table class="table table-dark table-striped" id="info-container" hidden>
+					<tbody id="info_table_body"></tbody>
+				</table>
+
+				<!-- Cdps -->
+				<div id="cdps-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">My CDP</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">List of CDPs opened by you</h5></div>
+					<div class="row mt-3">
+						<div class="col pl-0">
+							<div class="list-group"><div class="card-columns" id="cdps_table"></div></div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Transfer -->
+				<div id="transfer-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Transfer BUCK</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Transfer your $BUCK tokens</h5></div>
+					<div class="row">
+						<div class="col pl-0">
+							<div style="max-width: 400px;" class="input-group mt-3 mb-3">
+								<input maxlength="12" type="text" class="form-control"
+									id="transfer_to_field" placeholder="Receiver">
+							</div>
+							<div style="max-width: 400px;" class="input-group mt-3 mb-3">
+								<input type="text" class="form-control"
+									id="transfer_quantity_field" placeholder="Quantity">
+								<div class="input-group-append">
+									<span class="input-group-text">$BUCK</span>
+								</div>
+							</div>
+							<div style="max-width: 400px;" class="input-group mt-3 mb-3">
+								<input type="text" maxlength="256" class="form-control"
+									id="transfer_memo_field" placeholder="Memo">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<button type="button" class="btn btn-dark" 
+						onclick="prepare_transfer()">Transfer</button>
+					</div>
+				</div>
+
+				<!-- Reparam -->
+				<div id="change-container" class="container-fluid" hidden>
+					<div id="change_cdp_id" hidden></div>
+					<div class="row"><h4 style="color: white" class="mb-4">Reparametrization</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Change parameters of your CDP</h5></div>
+
+					<div class="row mb-4">
+						<div class="col pl-0" style="width: 400px; max-width: 400px;">
+							<div id="change_cdp_container" class=" ml-0" style="max-width: 300px;"></div>
+						</div>
+					</div>
+
+
+					<div class="row mt-3">
+						<!-- reparam -->
+
+						<div class="col pl-0" style="width: 400px; max-width: 400px;">
+							<div class="container-fluid">
+								<div class="row"><h6 style="color: white" class="mb-3">Change collateral / debt</h6></div>
+								<div class="row">
+									<div class="col pl-0" style="width: 500px">
+										<div style="max-width: 350px;" class="input-group mt-3 mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text">Debt</span>
+											</div>
+											<input type="text" class="form-control"
+												id="change_debt_field" placeholder="Change quantity">
+											<div class="input-group-append">
+												<span class="input-group-text">$BUCK</span>
+											</div>
+										</div>
+										<div style="max-width: 350px;" class="input-group mt-3 mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text">Collateral</span>
+											</div>
+											<input type="text" class="form-control"
+												id="change_collateral_field" placeholder="Change quantity">
+											<div class="input-group-append">
+												<span class="input-group-text">EOS</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-dark" onclick="prepare_change()">Change</button>
+								</div>
+
+								<div class="row">
+									<div class="container-fluid">
+										<div class="row">
+											<div class="col mt-5 pl-0">
+												<span class="text-white-50">You can demove all debt to become an insurer</span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col mt-2 pl-0">
+												<button type="button" class="btn btn-dark" onclick="prepare_remove_debt()">Remove all debt</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- icr -->
+						<div class="col pl-0">
+							<div class="row"><h6 style="color: white" class="mb-3">Change ICR</h6></div>
+							<div class="row">
+								<div class="col pl-0" style="max-width: 400px;">
+									<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+										<div class="input-group-prepend">
+												<span class="input-group-text">ICR</span>
+											</div>
+										<input maxlength="4" type="text" class="form-control"
+											id="change_icr_field" placeholder="New value">
+										<div class="input-group-append">
+											<span class="input-group-text">%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<button type="button" class="btn btn-dark" onclick="prepare_changeicr()">Change ICR</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Savings -->
+				<div id="savings-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Savings</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Put money or take them out from savings</h5></div>
+					<div class="row mt-3">
+
+						<!-- save -->
+						<div class="col pl-0" style="max-width: 400px;">
+							<div class="container-fluid">
+								<div class="row"><h6 style="color: white" class="mb-3">Put into savings</h6></div>
+								<div class="row">
+									<div class="col pl-0">
+										<span id="savings_buck_balance" class="text-white-50">Loading balance…</span><br/>
+										<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+											<input type="text" class="form-control"
+												id="save_field" placeholder="Quantity">
+											<div class="input-group-append">
+												<span class="input-group-text">$BUCK</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-dark" onclick="prepare_savings(true)">Save</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- unsave -->
+						<div class="col pl-0">
+							<div class="row"><h6 style="color: white" class="mb-3">Withdraw from savings</h6></div>
+							<div class="row">
+								<div class="col pl-0" style="max-width: 350px;">
+									<span id="savings_savings_balance" class="text-white-50">Loading balance…</span><br/>
+
+									<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+										<input type="text" class="form-control"
+											id="unsave_field" placeholder="Quantity">
+										<div class="input-group-append">
+											<span class="input-group-text">$BUCK</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<button type="button" class="btn btn-dark" onclick="prepare_savings(false)">Unsave</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Funds -->
+				<div id="funds-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Funds</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Get funds into the system to work with CDPs</h5></div>
+					<div class="row mt-3">
+
+						<!-- deposit -->
+						<div class="col pl-0" style="max-width: 400px;">
+							<div class="container-fluid">
+								<div class="row"><h6 style="color: white" class="mb-3">Deposit funds</h6></div>
+								<div class="row">
+									<div class="col pl-0">
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-sm pl-0">
+													<span id="funds_eos_balance" class="text-white-50">Loading balance…</span><br/>
+													<div class="input-group mt-3 mb-3">
+														<input type="text" class="form-control"
+															id="deposit-field" placeholder="Quantity">
+														<div class="input-group-append">
+															<span class="input-group-text">EOS</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-dark" onclick="prepare_deposit('deposit-field')">Deposit</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- withdraw -->
+						<div class="col pl-0">
+							<div class="row"><h6 style="color: white" class="mb-3">Withdraw funds</h6></div>
+							<div class="row">
+								<div class="col" style="max-width: 400px;">
+									<div class="container-fluid pl-0">
+										<div class="row">
+											<div class="col-sm pl-0">
+												<span id="funds_rex_balance" class="text-white-50">Loading funds…</span><br/>
+												<div class="input-group mt-3 mb-3">
+													<input type="text" class="form-control"
+														id="withdraw-field" placeholder="Quantity">
+													<div class="input-group-append">
+														<span class="input-group-text">EOS</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<button type="button" class="btn btn-dark" onclick="prepare_withdraw('withdraw-field')">Withdraw</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Open CDP -->
+				<div id="open-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Open CDP</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">CDP is the main financial instrument that is used by debtors and insurers<br/>to access the money market protocol</h5></div>
+
+					<div class="row">
+						<div class="col pl-0" style="max-width: 350px;" >
+							<div style="max-width: 300px;" class="input-group mt-3 mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">DCR</span>
+								</div>
+								<input type="text" maxlength="4" class="form-control"
+									id="open_dcr_field" placeholder="Debt Ratio">
+								<div class="input-group-append">
+									<span class="input-group-text">%</span>
+								</div>
+							</div>
+							<div style="max-width: 300px;" class="input-group mt-3 mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">ICR</span>
+								</div>
+								<input maxlength="4" type="text" class="form-control"
+									id="open_icr_field" placeholder="Insurance Ratio">
+								<div class="input-group-append">
+									<span class="input-group-text">%</span>
+								</div>
+							</div>
+							<div style="max-width: 300px;" class="input-group mt-3 mb-3">
+								<input  type="text" class="form-control"
+									id="open_collateral_field" placeholder="Collateral quantity">
+								<div class="input-group-append">
+									<span class="input-group-text">EOS</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col pl-0">
+							<div class="text-white-50 mt-3">Debt Collateralization Ratio defines <br/>the amount of $BUCK and debt you will receive.<br/>If this ratio goes below 150%, CDP will be liquidated.</div>
+							<div class="text-white-50 mt-3">Insurance Collateral Ratio defines the maximum amount<br/>of debt and collateral an insurer may receive in liquidation.</div>
+						</div>
+					</div>
+
+					<div class="row text-white-50 mb-3" id="open_bucks_container">Enter values to see how much $BUCK you will receive…</div>
+
+					<div class="row">
+						<button type="button" class="btn btn-dark" onclick="prepare_open()">Open</button>
+					</div>
+				</div>
+
+				<!-- Exchange -->
+				<div id="exchange-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Exchange</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Exchange $BUCK to EOS with other users directly</h5></div>
+
+					<div class="row">
+						<div class="col pl-0 mb-3 mt-3" id="exchange_order_container" style="max-width: 800px;" hidden>
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col mb-3 pl-0">
+										<span id="exchange_order_label" class="text-white-50"></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col mb-5 pl-0">
+										<button type="button" class="btn btn-dark" onclick="prepare_exchange_cancel()">Cancel order</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+
+						<!-- buck → eos -->
+						<div class="col mt-3 pl-0 mb-5" style="max-width: 400px;">
+							<div class="container-fluid">
+								<div class="row"><h6 style="color: white" class="mb-3">EOS → $BUCK</h6></div>
+								<div class="row">
+									<div class="col pl-0">
+										<span id="exchange_eos_balance" class="text-white-50">Loading balance…</span><br/>
+										<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+											<input  type="text" class="form-control"
+												id="exchange-deposit-field" placeholder="Quantity">
+											<div class="input-group-append">
+												<span class="input-group-text">EOS</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-dark" onclick="prepare_deposit_exchange()">Exchange</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- eos → buck -->
+						<div class="col pl-0 mt-3 mb-5" style="max-width: 400px;" >
+							<div class="container-fluid">
+								<div class="row"><h6 style="color: white" class="mb-3">$BUCK → EOS</h6></div>
+								<div class="row">
+									<div class="col pl-0">
+										<span id="exchange_buck_balance" class="text-white-50">Loading balance…</span><br/>
+										<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+											<input  type="text" class="form-control"
+												id="exchange-buck-field" placeholder="Quantity">
+											<div class="input-group-append">
+												<span class="input-group-text">$BUCK</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button type="button" class="btn btn-dark" onclick="prepare_exchange('exchange-buck-field')">Exchange</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+
+						<!-- withdraw -->
+						<div class="col mt-5" id="withdraw_exchange_funds_container" hidden>
+							<div class="row"><h6 style="color: white" class="mb-3">Withdraw EOS from exchange</h6></div>
+							<div class="row">
+								<div class="col pl-0 mb-3" style="max-width: 400px;">
+									<span id="exchange_fund_balance" class="text-white-50">Loading balance…</span><br/>
+								</div>
+							</div>
+							<div class="row">
+								<button type="button" class="btn btn-dark" onclick="prepare_withdraw_exchange()">Withdraw all</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
