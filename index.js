@@ -177,7 +177,6 @@ async function prepare_open() {
 	let fund = await db.fund()
 	if (fund !== undefined) {
 		let deposited = fund.balance
-		console.log(quantity, deposited)
 		if (amount(quantity) >= amount(deposited)) {
 			alert("Not enough funds", "warning")
 			return
@@ -299,16 +298,25 @@ async function reload_exchange() {
 	let funds = await db.fund()
 	let eos = await db.eos()
 
-	if (balance === undefined || funds === undefined || eos === undefined) {
-		return
-	}
-
 	let buck_balance = document.getElementById("exchange_buck_balance")
 	let eos_balance = document.getElementById("exchange_eos_balance")
 	let ex_funds_balance = document.getElementById("exchange_fund_balance")
 
-	buck_balance.innerHTML = `You have ${balance.balance} on your personal balance`
-	eos_balance.innerHTML = `You have ${eos.balance} on your personal balance`
+	if (balance === undefined) {
+		buck_balance.innerHTML = `You have ${asset(0, "BUCK")} on your personal balance`
+	}
+	else {
+		buck_balance.innerHTML = `You have ${balance.balance} on your personal balance`
+	}
+
+	if (eos_balance === undefined) {
+		eos_balance.innerHTML = `You have ${asset(0, "EOS")} on your personal balance`
+	}
+	else {
+		eos_balance.innerHTML = `You have ${eos.balance} on your personal balance`	
+	}
+
+	if (funds === undefined) return
 
 	document.getElementById('withdraw_exchange_funds_container').hidden = amount(funds.exchange_balance) == 0
 	ex_funds_balance.innerHTML = `You have ${funds.exchange_balance} in your exchange funds`
@@ -372,7 +380,7 @@ async function reload_savings() {
 	savings_balance.innerHTML = `You have ${savings} in savings`
 
 	if (balance === undefined) {
-		buck_balance.innerHTML = `Unable to load data`
+		buck_balance.innerHTML = `Your balance: ${asset(0, "BUCK")}`
 	}
 	else {
 		buck_balance.innerHTML = `Your balance: ${balance.balance}`
@@ -386,7 +394,7 @@ async function reload_open() {
 		let collateral = parseFloat($("#open_collateral_field").val())
 
 		let buck_label = document.getElementById('open_bucks_container')
-		let should_show = !isNaN(dcr) && !isNaN(collateral) && collateral !== undefined && (dcr >= CONST.CR || dcr == 0) && collateral >= CONST.MIN_COLLATERAL
+		let should_show = !isNaN(dcr) && !isNaN(collateral) && collateral !== undefined && (dcr >= CONST.CR || dcr == 0)
 		buck_label.hidden = false
 		if (should_show) {
 			if (dcr == 0) {
@@ -398,7 +406,7 @@ async function reload_open() {
 			}
 		}
 		else {
-			buck_label.innerHTML = `Enter values to see how much $BUCK you will receive…`
+			buck_label.innerHTML = `Enter correct values to see how much $BUCK you will receive…`
 		}
 	}
 	$("#open_dcr_field").on(EVENT.input, handler)
