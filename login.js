@@ -36,7 +36,7 @@ async function show_balance() {
 	}
 
 	let eos_funds = asset(await convert(amount(fundbalance), false), "EOS")
-	fund_label.innerHTML = `<span data-toggle="tooltip" title="Approximate worth of your deposited funds in EOS\nActual amount in REX is: ${fundbalance}">FUND: ${eos_funds}</span>`
+	fund_label.innerHTML = `<span data-toggle="tooltip" title="Approximate worth of your deposited funds\nActual amount is: ${fundbalance}">FUND: ${eos_funds}</span>`
 
 	var buckbalance = asset(0, "BUCK")
 	if (balance !== undefined) {
@@ -56,7 +56,7 @@ async function show_balance() {
 async function show_price() {
 	let stat = await db.stat()
 	let price_label = document.getElementById("top_eos_price")
-	price_label.innerHTML = `<span data-toggle="tooltip" title="Current Oracle's EOS price.\nUpdated at ${date(stat.oracle_timestamp)}.">$${(await price()) / 100}</span>`
+	price_label.innerHTML = `<span data-toggle="tooltip" title="Current Oracle's EOS price\nUpdated at ${date(stat.oracle_timestamp)}">$${(await price()) / 100}</span>`
 }
 
 function setup_user() {

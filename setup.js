@@ -32,7 +32,7 @@ let EVENT = {
 	input: 'change keydown keypress keyup mousedown click mouseup'
 }
 
-let network = ENDPOINT.main
+let network = ENDPOINT.jungle
 
 let ACCOUNT = {
 	main: network == ENDPOINT.main ? "buckprotocol" : "scrugeosbuck", eosio: "eosio", token: "eosio.token"
