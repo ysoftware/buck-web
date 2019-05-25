@@ -401,8 +401,13 @@ async function reload_open() {
 				buck_label.innerHTML = `You will not receive $BUCK from this CDP`
 			}
 			else {
-				let buck = asset(collateral * (await price()) / dcr, "BUCK")
-				buck_label.innerHTML = `You will receive ~${buck} and the same amount of debt`
+				if (collateral < 5) {
+					buck_label.innerHTML = `Minimum collateral is 5 EOS`
+				}
+				else {
+					let buck = asset(collateral * (await price()) / dcr, "BUCK")
+					buck_label.innerHTML = `You will receive ~${buck} and the same amount of debt`
+				}
 			}
 		}
 		else {
