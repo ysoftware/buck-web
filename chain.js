@@ -26,7 +26,7 @@ function is_insurer(cdp) {
 
 function asset(amount, symbol="REX") {
 	if (isNaN(parseFloat(amount))) return undefined
-	return fixed(parseFloat(amount)) + " " + symbol 
+	return fixed(parseFloat(amount)).toFixed(4) + " " + symbol
 }
 
 function amount(asset) {
