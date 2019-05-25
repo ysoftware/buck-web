@@ -92,7 +92,7 @@ async function prepare_savings(save) {
 	var quantity = asset((save ? save_field : unsave_field).value, "BUCK")
 
 	if (!save) {
-		quantity = Math.round(amount(quantity) / (await savings_price()))
+		quantity = Math.floor(amount(quantity) / (await savings_price()))
 	}
 
 	// to-do validate

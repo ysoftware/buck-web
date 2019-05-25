@@ -43,36 +43,35 @@ async function cdp_view(cdp, show_controls=true) {
 		}
 	}
 
-	let show_taxes = !is_insurer(cdp)
+	let show_taxes = !is_insurer(cdp) && badge === ""
 	let taxes = await calculate_tax(cdp, !show_controls)
 
 	let taxed_collateral = asset(amount(cdp.collateral) - taxes.collateral, "REX")
 	let taxed_debt = asset(amount(cdp.debt) + taxes.debt, "BUCK")
 
-	let accrued_collateral = asset(taxes.collateral, "REX")
+	let accrued_collateral = asset((await convert(taxes.collateral, false)), "EOS")
 	let accrued_debt = asset(taxes.debt, "BUCK")
 
 	let eos_amount = await convert(amount(taxed_collateral), false)
 	let eos_collateral = asset(eos_amount, "EOS")
 	let rex_collateral = short(amount(taxed_collateral), "REX")
 
-	var debt = `<span class="align-middle" style="font-size: 20px;">No debt</span>`
-	if (amount(taxed_debt) > 0) {
-		let warning = !show_controls && taxes.debt == 0.0001 ? "\n\n(minimum tax of 0.0001 BUCK\nwill be accrued when updating cdp)" : ""
-		var tooltip = ""
-		if (taxes.debt > 0 && show_taxes) {
-			tooltip = ` data-toggle="tooltip" title="Actual: ${cdp.debt}\n+${accrued_debt} taxed ${warning}"`
-		}
-		debt = `<span ${tooltip} class="align-middle" style="font-size: 20px;">${taxed_debt}</span>`
-	}
-
 	var col_tax = `data-toggle="tooltip" title="Actual: ${cdp.collateral}`
-	if (taxes.collateral > 0 && show_taxes) {
-		console.log(show_taxes)
+	if (amount(accrued_collateral) > 0 && show_taxes) {
 		let warning = !show_controls && taxes.collateral == 0.0001 ? "\n\n(minimum tax of 0.0001 REX\nwill be accrued when updating cdp)" : ""
 		col_tax += `\n-${accrued_collateral} taxed ${warning}`
 	}
 	col_tax += `"`
+
+	var debt = `<span class="align-middle" style="font-size: 20px;">No debt</span>`
+	if (amount(taxed_debt) > 0) {
+		let warning = !show_controls && taxes.debt == 0.0001 ? "\n\n(minimum tax of 0.0001 BUCK\nwill be accrued when updating cdp)" : ""
+		var tooltip = ""
+		if (amount(accrued_debt) > 0 && show_taxes) {
+			tooltip = ` data-toggle="tooltip" title="Actual: ${cdp.debt}\n+${accrued_debt} taxed ${warning}"`
+		}
+		debt = `<span ${tooltip} class="align-middle" style="font-size: 20px;">${taxed_debt}</span>`
+	}
 
 	var dcr = ""
 	let cdp_dcr = await get_dcr(cdp)
