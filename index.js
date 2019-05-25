@@ -167,7 +167,7 @@ async function prepare_open() {
 	if (icr !== 0 && icr < CONST.CR) { alert("ICR can not be less than 150%", "warning"); return }
 	if (icr > CONST.MAX_ICR || icr > CONST.MAX_ICR) { alert("ICR or DCR too high", "warning"); return }
 	if (dcr < CONST.CR && dcr !== 0) { alert("DCR can not be less than 150%", "warning"); return }
-	if (collateral < CONST.MIN_COLLATERAL) { alert("Not enough collateral", "warning"); return }
+	if (collateral < CONST.MIN_COLLATERAL) { alert("Minimum collateral is 5 EOS", "warning"); return }
 
 	if (dcr > 0) {
 		let debt = ((await price()) * collateral / dcr)
@@ -402,7 +402,7 @@ async function reload_open() {
 			}
 			else {
 				let buck = asset(collateral * (await price()) / dcr, "BUCK")
-				buck_label.innerHTML = `You will receive ${buck} and the same amount of debt`
+				buck_label.innerHTML = `You will receive ~${buck} and the same amount of debt`
 			}
 		}
 		else {

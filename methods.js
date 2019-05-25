@@ -46,7 +46,7 @@ async function cdp_view(cdp, show_controls=true) {
 	let show_taxes = !is_insurer(cdp)
 	let taxes = await calculate_tax(cdp, !show_controls)
 
-	let taxed_collateral = asset(amount(cdp.collateral) + taxes.collateral, "REX")
+	let taxed_collateral = asset(amount(cdp.collateral) - taxes.collateral, "REX")
 	let taxed_debt = asset(amount(cdp.debt) + taxes.debt, "BUCK")
 
 	let accrued_collateral = asset(taxes.collateral, "REX")
@@ -69,7 +69,7 @@ async function cdp_view(cdp, show_controls=true) {
 	var col_tax = `data-toggle="tooltip" title="${cdp.collateral}"`
 	if (taxes.collateral > 0 && show_taxes) {
 		let warning = !show_controls && taxes.collateral == 0.0001 ? "\n\n(minimum tax of 0.0001 REX\nwill be accrued when updating cdp)" : ""
-		col_tax += `\n+${accrued_collateral} ${warning}`
+		col_tax += `\n-${accrued_collateral} ${warning}`
 	}
 	col_tax += `"`
 
@@ -117,7 +117,6 @@ async function cdp_view(cdp, show_controls=true) {
 				</li>
 
 				<li class="list-group-item border-0" style="background:transparent;"><nobr>${dcr}${icr}</nobr></li>
-
 				${controls}
 
 			</ul>
