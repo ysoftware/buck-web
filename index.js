@@ -244,9 +244,29 @@ async function reload_information() {
 		var buck_balance = asset(0, "BUCK")
 		var eos_balance = asset(0, "EOS")
 
+		var maturities = []
+
 		if (funds !== undefined) {
 			deposited = asset(await convert(amount(funds.balance)), "EOS")
-			matured = asset(await convert(funds.matured_rex / 10000), "EOS")
+
+			var matured_eos = await convert(funds.matured_rex / 10000)
+			var unprocessed_matured_eos = 0
+
+			for (i in funds.rex_maturities) {
+				let maturity = funds.rex_maturities[i]
+				let eos_amount = await convert(maturity.second / 10000, false)
+
+				if (time(maturity.first) < now()) {
+					unprocessed_matured_eos += eos_amount
+				}
+				else {
+					let maturity_date = date(maturity.first, "d MMM")
+					maturities.push(`+${ asset(eos_amount, "EOS") } on ${maturity_date}`)
+				}
+			}
+			maturities = maturities.join("\n")
+
+			matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
 			savings = asset(funds.savings_balance * price, "BUCK")
 		}
 		if (balance !== undefined) {
@@ -257,10 +277,11 @@ async function reload_information() {
 		}
 
 		rows += row(["Personal EOS balance", eos.balance])
-		rows += row(["Deposited funds", deposited + ` (${matured} matured)`])
+		rows += row(["Deposited funds", `<span data-toggle="tooltip" title="Maturities:\n${maturities}">${deposited} (${matured} matured)</span>`])
 		rows += empty_row
 		rows += row(["Personal balance", buck_balance])
 		rows += row(["Savings amount", savings])
+		$(function () {$('[data-toggle="tooltip"]').tooltip()})
 	}
 	else {
 
@@ -381,8 +402,6 @@ async function reload_change(str_id) {
 			return
 		}
 
-		console.log(change_collateral)
-
 		let new_cdp = Object.assign({}, cdp)
 		new_cdp.collateral = asset(amount(new_cdp.collateral) + (await convert(change_collateral, true)) - taxes.collateral, "REX")
 		new_cdp.debt = asset(amount(new_cdp.debt) + taxes.debt + change_debt, "BUCK")
@@ -432,19 +451,35 @@ async function reload_savings() {
 async function reload_open() {
 	let handler = async () => {
 		var dcr = $("#open_dcr_field").val()
+		var icr = $("#open_icr_field").val()
 		dcr = dcr == "" ? 0 : parseInt(dcr)
 		let collateral = parseFloat($("#open_collateral_field").val())
 
 		let buck_label = document.getElementById('open_bucks_container')
-		let should_show = !isNaN(dcr) && !isNaN(collateral) && collateral !== undefined && (dcr >= CONST.CR || dcr == 0)
+		let should_show = !isNaN(dcr) && !isNaN(collateral) && collateral !== undefined
 		buck_label.hidden = false
 		if (should_show) {
 			if (dcr == 0) {
-				buck_label.innerHTML = `You will not receive $BUCK from this CDP`
+				console.log(icr)
+				if (icr > CONST.MAX_ICR) {
+					buck_label.innerHTML = "Maximum ICR is 1000%"
+				}
+				else if (icr < CONST.CR) {
+					buck_label.innerHTML = "Minimum ICR is 150%"
+				}
+				else {
+					buck_label.innerHTML = `You will not receive $BUCK from this CDP`
+				}
 			}
 			else {
 				if (collateral < 5) {
 					buck_label.innerHTML = `Minimum collateral is 5 EOS`
+				}
+				else if (dcr < CONST.CR) {
+					buck_label.innerHTML = `Minimum DCR is 150%`
+				}
+				else if (dcr > CONST.MAX_ICR) {
+					buck_label.innerHTML = `Maximum DCR is 1000%`
 				}
 				else {
 					let buck = asset(collateral * (await price()) / dcr, "BUCK")
@@ -456,12 +491,14 @@ async function reload_open() {
 			buck_label.innerHTML = `Enter correct values to see how much $BUCK you will receive…`
 		}
 	}
+	$("#open_icr_field").on(EVENT.input, handler)
 	$("#open_dcr_field").on(EVENT.input, handler)
 	$("#open_collateral_field").on(EVENT.input, handler)
 }
 
 function unsubscribe_events() {
 	$("#open_dcr_field").off(EVENT.input)
+	$("#open_icr_field").off(EVENT.input)
 	$("#open_collateral_field").off(EVENT.input)
 	$("#change_collateral_field").off(EVENT.input)
 	$("#change_debt_field").off(EVENT.input)

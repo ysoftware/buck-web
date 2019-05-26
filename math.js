@@ -24,12 +24,12 @@ async function calculate_tax(cdp, accrue_min=false) {
 	return { debt: accrued_debt, collateral: accrued_collateral }
 }
 
-function date(value, format="d MMM H:mm:ss") { 
+function date(value, format="d MMM H:mm:ss") {
 	return $.format.date(new Date(value), format)
 }
 
 function time(value) {
-	return new Date(value).getTime()
+	return new Date(value).getTime() / 1000
 }
 
 function now() {
