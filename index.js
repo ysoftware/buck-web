@@ -420,7 +420,17 @@ async function reload_change(str_id) {
 		let new_dcr = await get_dcr(new_cdp)
 		new_dcr_label.hidden = false
 
-		if (new_dcr >= 150) {
+
+		if (amount(new_cdp.debt) < CONST.MIN_DEBT && amount(new_cdp.debt) > 0) {
+			new_dcr_label.innerHTML = "Minimum debt is 10 $BUCK"
+		}
+		else if ((await convert(amount(new_cdp.collateral), false)) < CONST.MIN_COLLATERAL) {
+			new_dcr_label.innerHTML = "Minimum collateral is 5 EOS"
+		}
+		else if (amount(new_cdp.debt) == 0) {
+			new_dcr_label.innerHTML = "Removing all debt"
+		}
+		else if (new_dcr >= 150) {
 			new_dcr_label.innerHTML = `New DCR: ~${new_dcr}%`
 		}
 		else {
@@ -499,6 +509,9 @@ async function reload_open() {
 				else {
 					let buck = asset(collateral * (await price()) / dcr, "BUCK")
 					buck_label.innerHTML = `You will receive ~${buck} and the same amount of debt`
+					if (dcr < 200) {
+						buck_label.innerHTML += "<br/>Recommended DCR is above 200%"
+					}
 				}
 			}
 		}
