@@ -283,10 +283,13 @@ async function reload_information() {
 		}
 
 		$(function () {$('[data-toggle="tooltip"]').tooltip()})
+
+		if (balance === undefined && eos === undefined && funds === undefined) {
+			alert("Unable to load data", "danger", ALERT.long)
+		}
 	}
-	
-	if (balance === undefined && eos === undefined && funds === undefined) {
-		alert("Unable to load data", "danger", ALERT.long)
+	else {
+		alert("Please, log in with Scatter", "warning")
 	}
 
 	table.innerHTML = rows
