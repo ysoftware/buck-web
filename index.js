@@ -90,9 +90,10 @@ async function prepare_savings(save) {
 	let save_field = document.getElementById("save_field")
 	let unsave_field = document.getElementById("unsave_field")
 	var quantity = asset((save ? save_field : unsave_field).value, "BUCK")
+	let price = await savings_price()
 
 	if (!save) {
-		quantity = Math.floor(amount(quantity) / (await savings_price()))
+		quantity = Math.floor(amount(quantity) / price)
 	}
 
 	// to-do validate
@@ -237,8 +238,7 @@ async function reload_information() {
 		rows += empty_row
 	}
 	else {
-		console.log(stats)
-		// reload_information()
+		// to-do try again?
 		return
 	}
 

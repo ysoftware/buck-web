@@ -94,8 +94,9 @@ async function savings_price() {
 	if (tax === undefined) return undefined
 	var savings_price = 0
 	if (tax.savings_supply > 0) {
-		savings_price = amount(tax.savings_pool) / tax.savings_supply 
+		savings_price = amount(tax.savings_pool) / tax.savings_supply
 	}
+	console.log(savings_price)	
 	return savings_price
 }
 
