@@ -178,7 +178,7 @@ async function prepare_open() {
 	if (fund !== undefined) {
 		let deposited = fund.balance
 		if (amount(quantity) >= amount(deposited)) {
-			alert("Not enough funds", "warning")
+			alert("Not enough deposited funds", "warning")
 			return
 		}
 	}
@@ -460,7 +460,6 @@ async function reload_open() {
 		buck_label.hidden = false
 		if (should_show) {
 			if (dcr == 0) {
-				console.log(icr)
 				if (icr > CONST.MAX_ICR) {
 					buck_label.innerHTML = "Maximum ICR is 1000%"
 				}

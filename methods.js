@@ -75,12 +75,12 @@ async function cdp_view(cdp, show_controls=true) {
 	var dcr = ""
 	let cdp_dcr = await get_dcr(cdp)
 	if (!(cdp_dcr == Infinity || isNaN(cdp_dcr))) {
-		dcr = `<span data-toggle="tooltip" title="Collateral to Debt ratio.\nCalculated as: Collateral*Price/Debt.\nCDP will be partially liquidated if this value goes below 150%."><span class="align-middle" style="font-size: 20px;">${cdp_dcr}%</span> <span class="text-secondary align-middle mr-3" style="font-size: 18px;">DCR</span></span>`
+		dcr = `<span data-toggle="tooltip" title="Debt Collateralization Ratio\nCalculated as: Collateral * Price / Debt\nCDP will be partially liquidated if this value goes below 150%"><span class="align-middle" style="font-size: 20px;">${cdp_dcr}%</span> <span class="text-secondary align-middle mr-3" style="font-size: 18px;">DCR</span></span>`
 	}
 
 	var icr = ""
 	if (cdp.icr > 0) {
-		icr = `<span data-toggle="tooltip" title="Insurance Collateral Ratio defines\nthe maximum amount of debt and collateral\nan insurers receives in liquidation."><span class="align-middle" style="font-size: 20px;">${cdp.icr}%</span> <span class="text-secondary align-middle" style="font-size: 18px;">ICR</span></span>`
+		icr = `<span data-toggle="tooltip" title="Maximum amount of debt and collateral\nthis CDP may receive in liquidation"><span class="align-middle" style="font-size: 20px;">${cdp.icr}%</span> <span class="text-secondary align-middle" style="font-size: 18px;">ICR</span></span>`
 	}
 
 	var close_button = ""
