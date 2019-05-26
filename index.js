@@ -325,7 +325,7 @@ async function reload_exchange() {
 	if (funds === undefined) return
 
 	document.getElementById('withdraw_exchange_funds_container').hidden = amount(funds.exchange_balance) == 0
-	ex_funds_balance.innerHTML = `You have ${funds.exchange_balance} in your exchange funds`
+	ex_funds_balance.innerHTML = `You have ${funds.exchange_balance} to withdraw`
 
 	let order_container = document.getElementById('exchange_order_container')
 	let order_label = document.getElementById('exchange_order_label')
