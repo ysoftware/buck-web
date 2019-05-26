@@ -125,9 +125,18 @@
 			<div class="col">
 
 				<!-- Info -->
-				<table class="table table-dark table-striped" id="info-container" hidden>
+				<div id="info-container" class="container-fluid" hidden>
+					<div class="row"><table class="table table-dark table-striped">
 					<tbody id="info_table_body"></tbody>
-				</table>
+					</table></div>
+
+					<div class="row mt-4" id="login_panel" hidden>
+						<h2 class="text-white-50 mt-5">Please, log in with Scatter</h2><br/>
+						<span class="text-white-50">More wallets support is coming soon</span><br/>
+						<button type="button" class="btn btn-outline-secondary mt-3" onclick="login()">Log in</button>
+					</div>
+				</div>
+
 
 				<!-- Cdps -->
 				<div id="cdps-container" class="container-fluid" hidden>

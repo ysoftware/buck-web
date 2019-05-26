@@ -236,6 +236,11 @@ async function reload_information() {
 		rows += row(["Price updated", date(stats.oracle_timestamp)])
 		rows += empty_row
 	}
+	else {
+		console.log(stats)
+		// reload_information()
+		return
+	}
 
 	if (account !== undefined) {
 		let price = await savings_price()
@@ -288,9 +293,7 @@ async function reload_information() {
 			alert("Unable to load data", "danger", ALERT.long)
 		}
 	}
-	else {
-		alert("Please, log in with Scatter", "warning")
-	}
+	document.getElementById("login_panel").hidden = account !== undefined
 
 	table.innerHTML = rows
 }

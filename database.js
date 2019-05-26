@@ -4,15 +4,13 @@ class Data {
 		this.expiration = expiration
 		this.updated = 0
 		this.updater = updater
-		this.isLoading = false
 	}
 
 	async get(reloadTime) {
 		let next_reload = this.updated + this.expiration
-		if ((this.object === undefined || next_reload < reloadTime) && !this.isLoading) {
-			this.isLoading = true
+		if (this.object === undefined || next_reload < reloadTime) {
 			this.object = await this.updater.call()
-			this.isLoading = false
+
 			if (this.object !== undefined) {
 				this.updated = now()
 			}
