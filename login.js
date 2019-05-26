@@ -55,6 +55,7 @@ async function show_balance() {
 
 async function show_price() {
 	let stat = await db.stat()
+	if (stat === undefined) return
 	let price_label = document.getElementById("top_eos_price")
 	price_label.innerHTML = `<span data-toggle="tooltip" title="Current Oracle's EOS price\nUpdated at ${date(stat.oracle_timestamp)}">$${(await price()) / 100}</span>`
 }

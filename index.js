@@ -194,31 +194,30 @@ async function reload_cdps() {
 	let table = document.getElementById("cdps_table")
 	table.innerHTML = ""
 
-	let cdps_result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, account.name, '5', 'i64', 100)
-	if (cdps_result === undefined) return
+	let cdps = await db.cdps()
 
 	let label = document.getElementById("my_cdp_nope")
-	label.hidden = cdps_result.rows.length != 0
-	if (cdps_result.rows.length == 0) {
+	label.hidden = cdps.length != 0
+	if (cdps.length == 0) {
 		table.innerHTML = ""
 		return
 	}
 
 	var rows = ""
 	var i = 0
-	while (cdps_result.rows.length > i) {
-		rows += await cdp_view(cdps_result.rows[i])
+	while (cdps.length > i) {
+		rows += await cdp_view(cdps[i])
 		i++
 	}
 
 	var total_debt = 0
 	var total_collateral = 0
-	cdps_result.rows.forEach(cdp => {
+	cdps.forEach(cdp => {
 		total_debt += amount(cdp.debt)
 		total_collateral += amount(cdp.collateral)
 	})
 
-	table.innerHTML += rows
+	table.innerHTML = rows
 }
 
 async function reload_information() {
@@ -231,10 +230,12 @@ async function reload_information() {
 	table.innerHTML = ""
 	var rows = ""
 
-	rows += row(["Total $BUCK supply", stats.supply])
-	rows += row(["Current EOS price", "$" + parseFloat(stats.oracle_eos_price) / 100])
-	rows += row(["Price updated", date(stats.oracle_timestamp)])
-	rows += empty_row
+	if (stats !== undefined) {
+		rows += row(["Total $BUCK supply", stats.supply])
+		rows += row(["Current EOS price", "$" + parseFloat(stats.oracle_eos_price) / 100])
+		rows += row(["Price updated", date(stats.oracle_timestamp)])
+		rows += empty_row
+	}
 
 	if (account !== undefined) {
 		let price = await savings_price()
@@ -245,6 +246,10 @@ async function reload_information() {
 		var eos_balance = asset(0, "EOS")
 
 		var maturities = []
+
+		if (eos !== undefined) {
+			rows += row(["Personal EOS balance", eos.balance])
+		}
 
 		if (funds !== undefined) {
 			deposited = asset(await convert(amount(funds.balance)), "EOS")
@@ -268,54 +273,54 @@ async function reload_information() {
 
 			matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
 			savings = asset(funds.savings_balance * price, "BUCK")
+
+			rows += row(["Deposited funds", `<span data-toggle="tooltip" title="Maturities:\n${maturities}">${deposited} (${matured} matured)</span>`])
+			rows += empty_row
+			rows += row(["Savings amount", savings])
 		}
 		if (balance !== undefined) {
-			buck_balance = balance.balance
-		}
-		if (eos !== undefined) {
-			eos_balance = eos.balance
+			rows += row(["Personal balance", buck_balance])
 		}
 
-		rows += row(["Personal EOS balance", eos.balance])
-		rows += row(["Deposited funds", `<span data-toggle="tooltip" title="Maturities:\n${maturities}">${deposited} (${matured} matured)</span>`])
-		rows += empty_row
-		rows += row(["Personal balance", buck_balance])
-		rows += row(["Savings amount", savings])
 		$(function () {$('[data-toggle="tooltip"]').tooltip()})
 	}
-	else {
-
+	
+	if (balance === undefined && eos === undefined && funds === undefined) {
+		alert("Unable to load data", "danger", ALERT.long)
 	}
 
-	table.innerHTML += rows
+	table.innerHTML = rows
 }
 
 async function reload_funds() {
 	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+
+	let eos_balance = document.getElementById('funds_eos_balance')
+	let rex_matured_balance = document.getElementById('funds_rex_balance')
 
 	let balance = await db.eos()
 	let funds = await db.fund()
 
 	var fundbalance = asset(0, "REX")
 	var fundmatured = 0
-	if (funds !== undefined) {
+	if (funds === undefined) {
+		rex_matured_balance.innerHTML = "Unable to load data"
+	}
+	else {
 		fundbalance = funds.balance
 		fundmatured = funds.matured_rex
+		let eos = asset(await convert(fundmatured / 10000, false), "EOS")
+		let rex = asset(fundmatured / 10000, "REX")
+		rex_matured_balance.innerHTML = `You have ${eos} worth of matured funds available to withdraw` // (${rex})`
 	}
 
 	var buckbalance = asset(0, "EOS")
-	if (balance !== undefined) {
-		buckbalance = balance.balance
+	if (balance === undefined) {
+		eos_balance.innerHTML = "Unable to load data"
 	}
-
-	let eos_balance = document.getElementById('funds_eos_balance')
-	let rex_matured_balance = document.getElementById('funds_rex_balance')
-
-	eos_balance.innerHTML = `You have ${buckbalance} on your personal balance available to deposit`
-
-	let eos = asset(await convert(fundmatured / 10000, false), "EOS")
-	let rex = asset(fundmatured / 10000, "REX")
-	rex_matured_balance.innerHTML = `You have ${eos} worth of matured funds available to withdraw` // (${rex})`
+	else {
+		eos_balance.innerHTML = `You have ${balance.balance} on your personal balance available to deposit`
+	}
 }
 
 async function reload_exchange() {
@@ -330,14 +335,14 @@ async function reload_exchange() {
 	let ex_funds_balance = document.getElementById("exchange_fund_balance")
 
 	if (balance === undefined) {
-		buck_balance.innerHTML = `You have ${asset(0, "BUCK")} on your personal balance`
+		buck_balance.innerHTML = `Unable to load data`
 	}
 	else {
 		buck_balance.innerHTML = `You have ${balance.balance} on your personal balance`
 	}
 
-	if (eos_balance === undefined) {
-		eos_balance.innerHTML = `You have ${asset(0, "EOS")} on your personal balance`
+	if (eos === undefined) {
+		eos_balance.innerHTML = `Unable to load data`
 	}
 	else {
 		eos_balance.innerHTML = `You have ${eos.balance} on your personal balance`	
@@ -436,12 +441,17 @@ async function reload_savings() {
 	let savings_balance = document.getElementById("savings_savings_balance")
 
 	let price = await savings_price()
-	let savings = asset(funds.savings_balance * price, "BUCK")
 
-	savings_balance.innerHTML = `You have ${savings} in savings`
+	if (funds === undefined) {
+		savings_balance.innerHTML = "Unable to load data"
+	}
+	else {
+		let savings = asset(funds.savings_balance * price, "BUCK")
+		savings_balance.innerHTML = `You have ${savings} in savings`
+	}
 
 	if (balance === undefined) {
-		buck_balance.innerHTML = `Your balance: ${asset(0, "BUCK")}`
+		buck_balance.innerHTML = `Unable to load data`
 	}
 	else {
 		buck_balance.innerHTML = `Your balance: ${balance.balance}`

@@ -4,6 +4,7 @@ async function to_rex(quantity, tax=0) { return await convert(quantity, true) / 
 
 async function convert(quantity, to_rex) {
 	let rexpool = await db.rex()
+	if (rexpool === undefined) return undefined
 	let R0 = amount(rexpool.total_rex)
 	let S0 = amount(rexpool.total_lendable)
 	if (to_rex) return fixed(quantity * R0 / S0)
