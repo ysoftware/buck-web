@@ -197,8 +197,14 @@ async function reload_cdps() {
 	let cdps_result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, account.name, '5', 'i64', 100)
 	if (cdps_result === undefined) return
 
-	var rows = ""
+	let label = document.getElementById("my_cdp_nope")
+	label.hidden = cdps_result.rows.length != 0
+	if (cdps_result.rows.length == 0) {
+		table.innerHTML = ""
+		return
+	}
 
+	var rows = ""
 	var i = 0
 	while (cdps_result.rows.length > i) {
 		rows += await cdp_view(cdps_result.rows[i])
