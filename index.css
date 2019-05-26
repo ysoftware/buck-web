@@ -1,7 +1,9 @@
+/* background color */
 body {
 	background-color: #25292e;
 }
 
+/* tooltip style */
 .tooltip-inner {
     white-space:pre;
     max-width:none;
@@ -14,6 +16,7 @@ button:focus {
     outline: none;
 }
 
+/* menu style */
 .list-group-mine .list-group-item.active {
     background-color: #475159;
     color: white;
@@ -29,10 +32,12 @@ button:focus {
     color: white;
 }
 
+/*   */
 [pointer] {
     cursor: pointer;
 }
 
+/* setup cdp grid */
 @media (min-width: 30em) {
     .card-columns {
         -webkit-column-count: 1;

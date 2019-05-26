@@ -64,8 +64,7 @@ async function cdp_view(cdp, show_controls=true) {
 	col_tax += `"`
 
 	var debt = `<span class="align-middle" style="font-size: 20px;">No debt</span>`
-	if (amount(taxed_debt) > 0) {
-		let warning = !show_controls && taxes.debt == 0.0001 ? "\n\n(minimum tax of 0.0001 BUCK\nwill be accrued when updating cdp)" : ""
+	if (amount(taxed_debt) > 0) {let warning = !show_controls && taxes.debt == 0.0001 ? "\n\n(minimum tax of 0.0001 BUCK\nwill be accrued when updating cdp)" : ""
 		var tooltip = ""
 		if (amount(accrued_debt) > 0 && show_taxes) {
 			tooltip = ` data-toggle="tooltip" title="Actual: ${cdp.debt}\n+${accrued_debt} taxed ${warning}"`
