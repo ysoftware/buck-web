@@ -90,7 +90,7 @@
 		</div>
 	</nav>
 
-	<div class="container-fluid pb-5 mb-5">
+	<div class="container-fluid pb-5 mb-5" style="min-width: 650px !important">
 		<div id="alerts" class="position-absolute mr-4" style="position: absolute; z-index: 1; width: 40%; right: 0;"></div> 
 
 		<div class="row mt-4 mb-4">
@@ -189,7 +189,7 @@
 							<div class="container-fluid">
 								<div class="row"><h6 style="color: white" class="mb-3">Change collateral / debt</h6></div>
 								<div class="row">
-									<div class="col pl-0" style="width: 500px">
+									<div class="col pl-0" style="width: 400px">
 										<div style="max-width: 350px;" class="input-group mt-3 mb-3">
 											<div class="input-group-prepend">
 												<span class="input-group-text">Collateral</span>
@@ -382,7 +382,7 @@
 
 					<div class="row">
 						<div class="col pl-0" style="max-width: 350px;" >
-							<div style="max-width: 300px;" class="input-group mt-3 mb-3">
+							<div style="max-width: 300px; min-width: 300px;" class="input-group mt-3 mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text">DCR</span>
 								</div>
@@ -409,18 +409,14 @@
 									<span class="input-group-text">EOS</span>
 								</div>
 							</div>
+							<div class="text-white-50 mb-3" style="max-width: 300px;"  id="open_bucks_container">Enter values to see how much $BUCK you will receive…</div>
+							<button type="button" class="btn btn-dark" onclick="prepare_open()">Open</button>
 						</div>
 
 						<div class="col pl-0">
-							<div class="text-white-50 mt-3">Debt Collateralization Ratio defines <br/>the amount of $BUCK and debt you will receive.<br/>If this ratio goes below 150%, CDP will be partially liquidated.</div>
-							<div class="text-white-50 mt-3">Insurance Collateral Ratio defines the maximum amount<br/>of debt and collateral an insurer may receive in liquidation.</div>
+							<div class="text-white-50 mt-3">Debt Collateralization Ratio defines<br/>the amount of $BUCK and debt you will receive.<br/>If it goes below 150%, CDP will be partially liquidated.</div>
+							<div class="text-white-50 mt-3">Insurance Collateralization Ratio — maximum amount<br/>of debt and collateral an insurer can receive in liquidation.</div>
 						</div>
-					</div>
-
-					<div class="row text-white-50 mb-3" style="max-width: 300px;"  id="open_bucks_container">Enter values to see how much $BUCK you will receive…</div>
-
-					<div class="row">
-						<button type="button" class="btn btn-dark" onclick="prepare_open()">Open</button>
 					</div>
 				</div>
 
