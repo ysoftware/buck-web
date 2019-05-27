@@ -12,7 +12,11 @@ async function convert(quantity, to_rex) {
 }
 
 async function calculate_tax(cdp, accrue_min=false) {
-	if (cdp.debt == 0) return { debt: 0, collateral: 0 }
+	if (amount(cdp.debt) == 0 ||
+		(amount(cdp.debt) < CONST.MIN_DEBT && amount(cdp.collateral) > CONST.MIN_INSURER_REX)) {
+		return { debt: 0, collateral: 0 }
+	}
+	console.log(cdp)
 
 	let now_time = now()
 	let last = cdp.modified_round

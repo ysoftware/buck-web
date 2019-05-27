@@ -43,7 +43,7 @@ async function cdp_view(cdp, show_controls=true) {
 		}
 	}
 
-	let show_taxes = !is_insurer(cdp) && badge === ""
+	let show_taxes = !is_insurer(cdp) && badge == ""
 	let taxes = await calculate_tax(cdp, !show_controls)
 
 	let taxed_collateral = asset(amount(cdp.collateral) - taxes.collateral, "REX")
