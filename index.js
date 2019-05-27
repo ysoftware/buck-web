@@ -58,7 +58,7 @@ async function prepare_close(id) {
 
 	// to-do validate
 
-	if (await modal("Are you sure to close this CDP?")) run_close(id)
+	if (await modal("Please, note that minimum amount of 0.0001 of tax will be added to your debt when making a request to change CDP", "Are you sure to close this CDP?")) run_close(id)
 }
 
 async function prepare_exchange(id) {
