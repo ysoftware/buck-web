@@ -21,7 +21,7 @@ async function getTable(table, contract=ACCOUNT.main, scope=undefined, value=und
 }
 
 function is_insurer(cdp) {
-	return cdp.icr > CONST.CR && amount(cdp.debt) < CONST.MIN_DEBT && amount(cdp.collateral) > CONST.MIN_INSURER_REX
+	return cdp.icr > CONST.CR && (amount(cdp.debt) < CONST.MIN_DEBT && amount(cdp.collateral) > CONST.MIN_INSURER_REX || amount(cdp.debt) == 0)
 }
 
 function asset(amount, symbol="REX") {
