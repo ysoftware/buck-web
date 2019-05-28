@@ -48,7 +48,7 @@ async function show_balance() {
 
 	if (savings > 0) {
 		let savings_buck = asset(savings * (await savings_price()), "BUCK")
-		top_savings_balance.innerHTML = `<span data-toggle="tooltip" title="Amount of $BUCK you have in savings">SAVINGS: ${savings_buck}</span>`
+		top_savings_balance.innerHTML = `<span data-toggle="tooltip" title="Approximate amount of $BUCK you have in savings">SAVINGS: ${savings_buck}</span>`
 		top_savings_balance.hidden = false
 	}
 }
