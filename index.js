@@ -172,7 +172,7 @@ async function prepare_open() {
 
 	if (dcr > 0) {
 		let debt = ((await price()) * collateral / dcr)
-		if (debt < CONST.MIN_DEBT) { alert("Not enough debt. Trying to add: ~ " + asset(debt, "BUCK"), "secondary"); return }
+		if (debt < CONST.MIN_DEBT) { alert("Minimum debt is 10 $BUCK. Trying to add: ~" + asset(debt, "BUCK"), "secondary"); return }
 	}
 
 	let fund = await db.fund()
