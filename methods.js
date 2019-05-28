@@ -56,10 +56,10 @@ async function cdp_view(cdp, show_controls=true) {
 	let eos_collateral = asset(eos_amount, "EOS")
 	let rex_collateral = short(amount(taxed_collateral), "REX")
 
-	var col_tax = `data-toggle="tooltip" title="Actual: ${cdp.collateral}`
+	var col_tax = ``
 	if (amount(accrued_collateral) > 0 && show_taxes) {
 		let warning = !show_controls && taxes.collateral == 0.0001 ? "\n\n(minimum tax of 0.0001 REX\nwill be accrued when updating cdp)" : ""
-		col_tax += `\n-${accrued_collateral} taxed ${warning}`
+		col_tax += `data-toggle="tooltip" title="-${accrued_collateral} taxed ${warning}`
 	}
 	col_tax += `"`
 
@@ -67,7 +67,7 @@ async function cdp_view(cdp, show_controls=true) {
 	if (amount(taxed_debt) > 0) {let warning = !show_controls && taxes.debt == 0.0001 ? "\n\n(minimum tax of 0.0001 BUCK\nwill be accrued when updating cdp)" : ""
 		var tooltip = ""
 		if (amount(accrued_debt) > 0 && show_taxes) {
-			tooltip = ` data-toggle="tooltip" title="Actual: ${cdp.debt}\n+${accrued_debt} taxed ${warning}"`
+			tooltip = ` data-toggle="tooltip" title="+${accrued_debt} taxed ${warning}"`
 		}
 		debt = `<span ${tooltip} class="align-middle" style="font-size: 20px;">${taxed_debt}</span>`
 	}
