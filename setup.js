@@ -11,7 +11,7 @@ let ACTION = {
 	exchange: "exchange", cancelorder: "cancelorder", removedebt: "removedebt"
 }
 
-let ALERT = { short: 1000, medium: 2500, long: 10000 }
+let ALERT = { short: 1000, medium: 2500, long: 7500 }
 
 let CONST = {
 	SR: 80, IR: 20, SP: 20, RF: 1, CR: 150, LF: 10, AR: 0.095,
