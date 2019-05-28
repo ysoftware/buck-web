@@ -532,8 +532,11 @@ async function reload_open() {
 				else if (icr < CONST.CR) {
 					buck_label.innerHTML = "Minimum ICR is 150%"
 				}
+				if (collateral < 5) {
+					buck_label.innerHTML = `Minimum collateral is 5 EOS`
+				}
 				else {
-					buck_label.innerHTML = `You will not receive $BUCK from this CDP`
+					buck_label.innerHTML = `You will not receive $BUCK from insurer CDP`
 				}
 			}
 			else {
