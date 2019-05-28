@@ -37,6 +37,8 @@ async function prepare_change() {
 	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
 	let id = document.getElementById('change_cdp_id').innerHTML
 
+	let fund = await db.fund()
+
 	var col_input = document.getElementById("change_collateral_field").value
 	if (col_input === "") { col_input = 0 }
 	var debt_input = document.getElementById("change_debt_field").value
@@ -44,9 +46,18 @@ async function prepare_change() {
 	let change_d = parseFloat(debt_input)
 	let change_c = parseFloat(col_input)
 	if (isNaN(change_d) || isNaN(change_c)) { alert("Incorrect input", "danger"); return }
-
-	let change_collateral = asset(await convert(change_c, true), "REX")
+	
 	let change_debt = asset(change_d, "BUCK")
+
+	var change_collateral;
+	let deposited = fund.balance
+	let deposited_eos = await convert(amount(deposited), false)
+	if (change_c == deposited_eos) {
+		change_collateral = deposited
+	}
+	else {
+		change_collateral = asset(await convert(change_c, true), "REX")
+	}
 
 	// to-do validate
 
@@ -93,7 +104,14 @@ async function prepare_savings(save) {
 	let price = await savings_price()
 
 	if (!save) {
-		quantity = Math.floor(amount(quantity) / price)
+		let fund = await db.fund()
+		let deposited_savings = fixed(fund.savings_balance * price)
+		if (deposited_savings == amount(quantity)) {
+			quantity = fund.savings_balance
+		}
+		else {
+			quantity = Math.floor(amount(quantity) / price)
+		}
 	}
 
 	// to-do validate
@@ -132,7 +150,18 @@ async function prepare_withdraw() {
 	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
 	let value = parseFloat(document.getElementById("withdraw-field").value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
-	let quantity = asset(await convert(value, true), "REX")
+
+	let fund = await db.fund()
+	let deposited = fund.balance
+	
+	var quantity;
+	let deposited_eos = await convert(amount(deposited), false)
+	if (value == deposited_eos) {
+		quantity = deposited
+	}
+	else {
+		quantity = asset(await convert(value, true), "REX")
+	}
 
 	// to-do validate
 
@@ -162,7 +191,17 @@ async function prepare_open() {
 	let collateral = fixed(parseFloat(document.getElementById("open_collateral_field").value))
 	if (isNaN(icr) || isNaN(dcr) || isNaN(collateral)) { alert("Incorrect input", "warning"); return }
 
-	let quantity = asset(await convert(collateral, true), "REX")
+	let fund = await db.fund()
+	let deposited = fund.balance
+
+	var quantity;
+	let deposited_eos = await convert(amount(deposited), false)
+	if (collateral == deposited_eos) {
+		quantity = deposited
+	}
+	else {
+		quantity = asset(await convert(collateral, true), "REX");
+	}
 
 	if (dcr === 0 && icr === 0) { alert("DCR and ICR can't be both 0", "warning"); return }
 	if (icr !== 0 && icr < CONST.CR) { alert("ICR can not be less than 150%", "warning"); return }
@@ -175,9 +214,7 @@ async function prepare_open() {
 		if (debt < CONST.MIN_DEBT) { alert("Minimum debt is 10 $BUCK. Trying to add: ~" + asset(debt, "BUCK"), "secondary"); return }
 	}
 
-	let fund = await db.fund()
 	if (fund !== undefined) {
-		let deposited = fund.balance
 		if (amount(quantity) >= amount(deposited)) {
 			alert("Not enough deposited funds", "warning")
 			return
@@ -591,7 +628,7 @@ async function reload_page(delay=0) {
 
 window.addEventListener('load', function() {
 	document.body.style.backgroundColor = COLOR.background
-	
+
 	var page = "info"
 	var split = window.location.href.split('#')
 	var path = ""
