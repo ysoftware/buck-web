@@ -85,7 +85,7 @@ function login() {
 		})
 		.catch(error => { 
 			alert(error.message, "warning")
-			reload_page() 
+			reload_page()
 		})
 	}
 }

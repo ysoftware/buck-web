@@ -1,5 +1,21 @@
 // Make actions
 
+async function prepare_redeem() {
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	let value = document.getElementById('redeem_field').value
+	let amount = parseFloat(value)
+	if (isNaN(amount)) { alert("Incorrect input", "danger"); return }
+	let quantity = asset(value, "BUCK")
+
+	// to-do validate
+	
+	if (amount < CONST.MIN_REDEMPTION) {
+		alert(`Minimum amount to redeem is ${CONST.MIN_REDEMPTION} BUCK`, "warning"); return
+	}
+
+	run_redeem(quantity)
+}
+
 async function prepare_changeicr() {
 	let id = document.getElementById('change_cdp_id').innerHTML
 	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
@@ -532,6 +548,18 @@ async function reload_savings() {
 	}
 }
 
+async function reload_redeem() {	
+	let balance = await db.balance()
+	let buck_balance = document.getElementById("redeem_buck_balance")
+
+	if (balance === undefined) {
+		buck_balance.innerHTML = `Balance not found`
+	}
+	else {
+		buck_balance.innerHTML = `Your balance: ${balance.balance}`
+	}
+}
+
 async function reload_open() {
 	let handler = async () => {
 		var dcr = $("#open_dcr_field").val()
@@ -628,6 +656,7 @@ async function reload_page(delay=0) {
 	document.getElementById("transfer-container").hidden = page != "transfer"
 	document.getElementById("exchange-container").hidden = page != "exchange"
 	document.getElementById("change-container").hidden = page != "change"
+	document.getElementById("redeem-container").hidden = page != "redeem"
 
 	switch (page) {
 		case "info": reload_information(); break
@@ -638,6 +667,7 @@ async function reload_page(delay=0) {
 		case "change": reload_change(id); break
 		case "transfer": reload_transfer(); break
 		case "open": reload_open(); break
+		case "redeem": reload_redeem(); break
 	}
 
 	let logged_in_menu = document.getElementById('logged_in_actions')

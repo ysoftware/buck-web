@@ -118,6 +118,9 @@
 							<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
 								class="list-group-item list-group-item-dark  list-group-item-action"
 								>Exchange</button>
+							<button type="button" id="redeem" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark  list-group-item-action"
+								>Redeem</button>
 						</div>
 				</ul>
 			</div>
@@ -136,6 +139,34 @@
 						<span class="text-white-50 mt-2">Support for more wallets is coming soon</span><br/>
 						<button type="button" class="btn btn-outline-secondary mt-3" onclick="login()">Log in</button>
 					</div>
+					</div>
+				</div>
+
+				<!-- Redeem -->
+				<div id="redeem-container" class="container-fluid" hidden>
+					<div class="row"><h4 style="color: white" class="mb-4">Redemption</h4></div>
+					<div class="row"><h5 class="mb-4 text-secondary">Redeem $BUCK for EOS directly from the contract</h5></
+					<div class="row">
+
+						<!-- save -->
+						<div class="container-fluid">
+							<div class="row"><h6 style="color: white" class="mb-3">Redeem $BUCK</h6></div>
+							<div class="row">
+								<div class="col pl-0">
+									<span id="redeem_buck_balance" class="text-white-50">Loading balance…</span><br/>
+									<div style="max-width: 250px;" class="input-group mt-3 mb-3">
+										<input autocomplete="off" type="text" class="form-control"
+											id="redeem_field" placeholder="Quantity">
+										<div class="input-group-append">
+											<span class="input-group-text">$BUCK</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<button type="button" class="btn btn-dark" onclick="prepare_redeem(true)">Redeem</button>
+							</div>
+						</div>
 					</div>
 				</div>
 

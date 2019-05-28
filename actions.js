@@ -33,14 +33,17 @@ async function run_deposit_exchange(quantity) {
 	return runTransaction([deposit, exchange])
 }
 
+async function run_redeem(quantity) {
+	return runTransaction(configure({ account: account.name, quantity: quantity }, ACTION.redeem))
+}
+
 async function run_deposit(quantity, exchange) {
 	let memo = exchange ? "exchange" : "deposit"
 	run_transfer(ACCOUNT.main, quantity, memo, ACCOUNT.token)
 }
 
 async function run_withdraw(quantity, exchange) {
-	let data = { account: account.name, quantity:quantity }
-	return runTransaction(configure(data, ACTION.withdraw))
+	return runTransaction(configure({ account: account.name, quantity:quantity }, ACTION.withdraw))
 }
 
 async function run_exchange_cancel() {

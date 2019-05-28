@@ -8,7 +8,7 @@ let TABLE = {
 let ACTION = {
 	update: "update", run: "run", open: "open", withdraw: "withdraw", transfer: "transfer", 
 	close: "close", changeicr: "changeicr", change: "change", save: "save", unsave: "unsave",
-	exchange: "exchange", cancelorder: "cancelorder", removedebt: "removedebt"
+	exchange: "exchange", cancelorder: "cancelorder", removedebt: "removedebt", redeem: "redeem"
 }
 
 let ALERT = { short: 1500, medium: 2500, long: 3500 }
@@ -33,7 +33,7 @@ let EVENT = {
 	input: 'change keydown keypress keyup mousedown click mouseup'
 }
 
-let network = ENDPOINT.main
+let network = ENDPOINT.jungle
 
 let ACCOUNT = {
 	main:"buckprotocol", eosio: "eosio", token: "eosio.token"
@@ -51,8 +51,19 @@ let configDefaults = { httpEndpoint: network.protocol + "://" + network.host + "
 let eos = ScatterJS.scatter.eos(network, Eos, configDefaults)
 
 ScatterJS.connect('BUCK Protocol', { network })
-	.then(connected => { if (!connected) alert("Could not find Scatter", "danger", ALERT.long); else setup_user() })
-	.catch(error => { alert(error.message, "danger", ALERT.long) })
+	.then(connected => { 
+		if (!connected) {
+			alert("Unable to connect to Scatter", "danger", ALERT.long)
+			reload_page()
+		}
+		else {
+			setup_user() 
+		}
+	})
+	.catch(error => { 
+		// reload_page() - don't show scatter login
+		alert(error.message, "danger", ALERT.long)
+	})
 
 /// login data
 
