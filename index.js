@@ -452,21 +452,23 @@ async function reload_change(str_id) {
 		let new_dcr = await get_dcr(new_cdp)
 		new_dcr_label.hidden = false
 
-
 		if (amount(new_cdp.debt) < CONST.MIN_DEBT && amount(new_cdp.debt) > 0) {
 			new_dcr_label.innerHTML = "Minimum debt is 10 $BUCK"
 		}
 		else if ((await convert(amount(new_cdp.collateral), false)) < CONST.MIN_COLLATERAL) {
 			new_dcr_label.innerHTML = "Minimum collateral is 5 EOS"
 		}
-		else if (amount(new_cdp.debt) == 0) {
+		else if (amount(new_cdp.debt) == 0 && amount(cdp.debt) != 0) {
 			new_dcr_label.innerHTML = "Removing all debt"
 		}
 		else if (new_dcr >= 150) {
 			new_dcr_label.innerHTML = `New DCR: ~${new_dcr}%`
 		}
-		else {
+		else if (!isNaN(new_dcr) && new_dcr > 0) {
 			new_dcr_label.innerHTML = "New DCR is too low"
+		}
+		else {
+			new_dcr_label.innerHTML = "Just adding collateral"
 		}
 	}
 
