@@ -87,6 +87,19 @@ class Database {
 	async balance() { return await this._balance.get(this.reloadTime) }
 	async eos() { return await this._eos.get(this.reloadTime) }
 	async rex() { return await this._rex.get(this.reloadTime) }
+
+	async get_exchange_order() {
+		if (this.account === undefined) return undefined
+		let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account.name, '1', 'i64', 1)
+		if (exchange_result === undefined && exchange_result.rows.length == 0) return undefined
+		return exchange_result.rows[0]
+	}
+
+	async get_cdp(id) {
+		let cdp_result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, id, '1', 'i64', 1)
+		if (cdp_result === undefined || cdp_result.rows.length == 0) return undefined
+		return cdp_result.rows[0]
+	}
 }
 
 async function savings_price() {

@@ -24,10 +24,7 @@ async function prepare_remove_debt() {
 
 async function prepare_exchange_cancel() {
 	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
-	let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account.name, '1', 'i64', 1)
-	let found = exchange_result !== undefined && exchange_result.rows.length > 0
-	if (!found) { alert("You don't have an exchange order up", "warning", ALERT.medium); return }
-
+	
 	// to-do validate
 
 	run_exchange_cancel(exchange.quantity)
@@ -402,12 +399,10 @@ async function reload_exchange() {
 	let order_container = document.getElementById('exchange_order_container')
 	let order_label = document.getElementById('exchange_order_label')
 
-	let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account.name, '1', 'i64', 1)
-	let found = exchange_result !== undefined && exchange_result.rows.length > 0
-	order_container.hidden = !found
-	if (found) {
-		let exchange = exchange_result.rows[0]
-		order_label.innerHTML = `You already have an exchange order<br/>placed for ${exchange.quantity}`
+	let order = await db.get_exchange_order()
+	order_container.hidden = order === undefined
+	if (order !== undefined) {
+		order_label.innerHTML = `You already have an exchange order<br/>placed for ${order.quantity}`
 	}
 }
 
@@ -425,15 +420,12 @@ async function reload_change(str_id) {
 	}
 
 	let balance = await db.balance()
-	let cdp_result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, id, '1', 'i64', 1)
-	if (cdp_result === undefined || cdp_result.rows.length == 0) {
-		alert(`Unable to load CDP #${id}`, "danger", ALERT.medium)
-		return
-	}
+	let cdp = await db.get_cdp(id)
+
+	if (cdp === undefined) { alert(`Unable to load CDP #${id}`, "danger", ALERT.medium); return }
 
 	// to-do verify can change cdp
 
-	let cdp = cdp_result.rows[0]
 	container.innerHTML = await cdp_view(cdp, false)
 	id_container.innerHTML = cdp.id
 
