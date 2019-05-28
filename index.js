@@ -2,7 +2,7 @@
 
 async function prepare_changeicr() {
 	let id = document.getElementById('change_cdp_id').innerHTML
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let icr_field = document.getElementById("change_icr_field")
 	let icr = parseInt(icr_field.value)
 	if (isNaN(icr)) { alert("Incorrect input", "danger"); return }
@@ -14,7 +14,7 @@ async function prepare_changeicr() {
 }
 
 async function prepare_remove_debt() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let id = document.getElementById('change_cdp_id').innerHTML
 
 	// to-do validate
@@ -23,7 +23,7 @@ async function prepare_remove_debt() {
 }
 
 async function prepare_exchange_cancel() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	
 	// to-do validate
 
@@ -31,7 +31,7 @@ async function prepare_exchange_cancel() {
 }
 
 async function prepare_change() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let id = document.getElementById('change_cdp_id').innerHTML
 
 	let fund = await db.fund()
@@ -62,7 +62,7 @@ async function prepare_change() {
 }
 
 async function prepare_close(id) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	// to-do validate
 
@@ -70,14 +70,21 @@ async function prepare_close(id) {
 }
 
 async function prepare_exchange(id) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let to_buck = id !== "exchange-buck-field"
 	let value = parseFloat(document.getElementById(id).value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 	let symbol = to_buck ? "EOS" : "BUCK"
 	let quantity = asset(value, symbol)
 
-	// to-do validate
+	if (symbol == "EOS" && amount(quantity) < CONST.MIN_EXCHANGE_EOS) {
+		alert(`Minimum exchange amount is ${CONST.MIN_EXCHANGE_EOS} EOS`, "warning"); return
+	}
+	else if (symbol == "BUCK" && amount(quantity) < CONST.MIN_EXCHANGE_BUCK) {
+		alert(`Minimum exchange amount is ${CONST.MIN_EXCHANGE_BUCK} $BUCK`, "warning"); return
+	}
+
+	// to-do validate top limit
 
 	run_exchange(quantity)
 }
@@ -88,17 +95,22 @@ async function prepare_deposit_exchange() {
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 	let quantity = asset(value, "EOS")
 
-	// to-do validate
+	if (amount(quantity) < CONST.MIN_EXCHANGE_EOS) {
+		alert(`Minimum exchange amount is ${CONST.MIN_EXCHANGE_EOS} EOS`, "warning"); return
+	}
+
+	// to-do validate top limit
 
 	run_deposit_exchange(quantity)
 }
 
 async function prepare_savings(save) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let save_field = document.getElementById("save_field")
 	let unsave_field = document.getElementById("unsave_field")
 	var quantity = asset((save ? save_field : unsave_field).value, "BUCK")
 	let price = await savings_price()
+
 
 	if (!save) {
 		let fund = await db.fund()
@@ -110,6 +122,11 @@ async function prepare_savings(save) {
 			quantity = Math.floor(amount(quantity) / price)
 		}
 	}
+	else {
+		if (amount(quantity) < CONST.MIN_SAVINGS) {
+			alert(`Minimum amount to put in savings is ${CONST.MIN_SAVINGS} $BUCK`, "warning"); return
+		}
+	}
 
 	// to-do validate
 
@@ -117,7 +134,7 @@ async function prepare_savings(save) {
 }
 
 async function prepare_transfer() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let quantity_field = document.getElementById("transfer_quantity_field")
 	let memo_field = document.getElementById("transfer_memo_field")
 	let to_field = document.getElementById("transfer_to_field")
@@ -133,7 +150,7 @@ async function prepare_transfer() {
 
 async function prepare_deposit(id) {
 
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let value = parseFloat(document.getElementById(id).value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 	let quantity = asset(value, "EOS")
@@ -144,7 +161,7 @@ async function prepare_deposit(id) {
 }
 
 async function prepare_withdraw() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let value = parseFloat(document.getElementById("withdraw-field").value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 
@@ -166,7 +183,7 @@ async function prepare_withdraw() {
 }
 
 async function prepare_withdraw_exchange() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let fund = await db.fund()
 	if (fund === undefined) return
 	if (amount(fund.exchange_balance) == 0) { alert("Exchange fund is empty", "warning", ALERT.medium); return }
@@ -225,7 +242,7 @@ async function prepare_open() {
 // Load View
 
 async function reload_cdps() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning", ALERT.short); return }
+	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let table = document.getElementById("cdps_table")
 	table.innerHTML = ""
 
@@ -415,7 +432,7 @@ async function reload_change(str_id) {
 	container.innerHTML = ""
 
 	if (isNaN(id)) {
-		alert(`Incorrect value for id.`, "secondary", ALERT.short)
+		alert(`Incorrect value for id.`, "secondary")
 		return
 	}
 

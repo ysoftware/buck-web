@@ -11,12 +11,13 @@ let ACTION = {
 	exchange: "exchange", cancelorder: "cancelorder", removedebt: "removedebt"
 }
 
-let ALERT = { short: 1000, medium: 2500, long: 7500 }
+let ALERT = { short: 1500, medium: 2500, long: 3500 }
 
 let CONST = {
 	SR: 80, IR: 20, SP: 20, RF: 1, CR: 150, LF: 10, AR: 0.095,
 	YEAR: 31557600, ACCRUAL_PERIOD: 1314900, 
 	MIN_DEBT: 10, MIN_REDEMPTION: 10, MIN_COLLATERAL: 5, MIN_INSURER_REX: 150000.0000,
+	MIN_EXCHANGE_EOS: 1, MIN_EXCHANGE_BUCK: 5, MIN_SAVINGS: 1,
 	MAX_ICR: 1000
 }
 

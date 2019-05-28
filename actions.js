@@ -1,5 +1,5 @@
 async function runTransaction(actions) {
-	alert("Awaiting Scatter response…", "primary", ALERT.long)
+	alert("Awaiting Scatter response…", "primary", ALERT.medium)
 	try {
 		if (!Array.isArray(actions)) { actions = [actions] }
 		let tx = await eos.transaction({ actions: actions })
