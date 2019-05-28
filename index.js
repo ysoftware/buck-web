@@ -261,7 +261,6 @@ async function reload_information() {
 
 			var matured_eos = await convert(funds.matured_rex / 10000)
 			var unprocessed_matured_eos = 0
-
 			for (i in funds.rex_maturities) {
 				let maturity = funds.rex_maturities[i]
 				let eos_amount = await convert(maturity.second / 10000, false)
@@ -274,12 +273,16 @@ async function reload_information() {
 					maturities.push(`+${ asset(eos_amount, "EOS") } on ${maturity_date}`)
 				}
 			}
-			maturities = maturities.join("\n")
-
+			
+			var maturities_tooltip = ""
+			if (maturities.length > 0) {
+				maturities_tooltip = ` data-toggle="tooltip" title="Maturities:\n${maturities.join("\n")}"`
+			}
+			
 			matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
 			savings = asset(funds.savings_balance * price, "BUCK")
 
-			rows += row(["Deposited funds", `<span data-toggle="tooltip" title="Maturities:\n${maturities}">${deposited} (${matured} matured)</span>`])
+			rows += row(["Deposited funds", `<span${maturities_tooltip}>${deposited} (${matured} matured)</span>`])
 			rows += empty_row
 			rows += row(["Savings amount", savings])
 		}
