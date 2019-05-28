@@ -360,17 +360,25 @@ async function reload_funds() {
 	let balance = await db.eos()
 	let funds = await db.fund()
 
-	var fundbalance = asset(0, "REX")
 	var fundmatured = 0
 	if (funds === undefined) {
 		rex_matured_balance.innerHTML = "Balance not found"
 	}
 	else {
-		fundbalance = funds.balance
-		fundmatured = funds.matured_rex
-		let eos = asset(await convert(fundmatured / 10000, false), "EOS")
-		let rex = asset(fundmatured / 10000, "REX")
-		rex_matured_balance.innerHTML = `You have ${eos} worth of matured funds available to withdraw` // (${rex})`
+
+		var matured_eos = await convert(funds.matured_rex / 10000)
+		var unprocessed_matured_eos = 0
+		for (i in funds.rex_maturities) {
+			let maturity = funds.rex_maturities[i]
+			let eos_amount = await convert(maturity.second / 10000, false)
+
+			if (time(maturity.first) < now()) {
+				unprocessed_matured_eos += eos_amount
+			}
+		}
+
+		let matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
+		rex_matured_balance.innerHTML = `You have ${matured} worth of matured funds available to withdraw`
 	}
 
 	var buckbalance = asset(0, "EOS")
