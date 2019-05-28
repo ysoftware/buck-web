@@ -35,7 +35,7 @@ let EVENT = {
 let network = ENDPOINT.jungle
 
 let ACCOUNT = {
-	main: network == ENDPOINT.main ? "buckprotocol" : "scrugeosbuck", eosio: "eosio", token: "eosio.token"
+	main:"buckprotocol", eosio: "eosio", token: "eosio.token"
 }
 
 /// start
