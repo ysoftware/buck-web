@@ -153,7 +153,7 @@ async function prepare_withdraw() {
 
 	let fund = await db.fund()
 	let deposited = fund.balance
-	
+
 	var quantity;
 	let deposited_eos = await convert(amount(deposited), false)
 	if (value == deposited_eos) {
@@ -350,7 +350,7 @@ async function reload_funds() {
 	var fundbalance = asset(0, "REX")
 	var fundmatured = 0
 	if (funds === undefined) {
-		rex_matured_balance.innerHTML = "Unable to load data"
+		rex_matured_balance.innerHTML = "Balance not found"
 	}
 	else {
 		fundbalance = funds.balance
@@ -362,7 +362,7 @@ async function reload_funds() {
 
 	var buckbalance = asset(0, "EOS")
 	if (balance === undefined) {
-		eos_balance.innerHTML = "Unable to load data"
+		eos_balance.innerHTML = "Balance not found"
 	}
 	else {
 		eos_balance.innerHTML = `You have ${balance.balance} on your personal balance available to deposit`
@@ -381,14 +381,14 @@ async function reload_exchange() {
 	let ex_funds_balance = document.getElementById("exchange_fund_balance")
 
 	if (balance === undefined) {
-		buck_balance.innerHTML = `Unable to load data`
+		buck_balance.innerHTML = `Balance not found`
 	}
 	else {
 		buck_balance.innerHTML = `You have ${balance.balance} on your personal balance`
 	}
 
 	if (eos === undefined) {
-		eos_balance.innerHTML = `Unable to load data`
+		eos_balance.innerHTML = `Balance not found`
 	}
 	else {
 		eos_balance.innerHTML = `You have ${eos.balance} on your personal balance`	
@@ -499,7 +499,7 @@ async function reload_savings() {
 	let price = await savings_price()
 
 	if (funds === undefined) {
-		savings_balance.innerHTML = "Unable to load data"
+		savings_balance.innerHTML = "Balance not found"
 	}
 	else {
 		let savings = asset(funds.savings_balance * price, "BUCK")
@@ -507,7 +507,7 @@ async function reload_savings() {
 	}
 
 	if (balance === undefined) {
-		buck_balance.innerHTML = `Unable to load data`
+		buck_balance.innerHTML = `Balance not found`
 	}
 	else {
 		buck_balance.innerHTML = `Your balance: ${balance.balance}`
