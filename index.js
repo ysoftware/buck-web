@@ -533,7 +533,14 @@ async function reload_open() {
 					buck_label.innerHTML = "Minimum ICR is 150%"
 				}
 				else {
-					buck_label.innerHTML = `You will not receive $BUCK from this CDP`
+					let rex_collateral = await convert(collateral, true)
+					if (rex_collateral < CONST.MIN_INSURER_REX) {
+						let min_insurer_eos = Math.ceil(await convert(CONST.MIN_INSURER_REX, false))
+						buck_label.innerHTML = `Minimum insurer collateral is ${min_insurer_eos} EOS`
+					}
+					else {
+						buck_label.innerHTML = `You will not receive $BUCK from this CDP`
+					}
 				}
 			}
 			else {
