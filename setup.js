@@ -5,7 +5,7 @@ let TABLE = {
 	fund: "fund", cdp: "cdp", taxation: "taxation", reparamreq: "reparamreq", closereq: "closereq"
 }
 
-let ACTION = { 
+let ACTION = {
 	update: "update", run: "run", open: "open", withdraw: "withdraw", transfer: "transfer", 
 	close: "close", changeicr: "changeicr", change: "change", save: "save", unsave: "unsave",
 	exchange: "exchange", cancelorder: "cancelorder", removedebt: "removedebt"
@@ -36,6 +36,10 @@ let network = ENDPOINT.jungle
 
 let ACCOUNT = {
 	main:"buckprotocol", eosio: "eosio", token: "eosio.token"
+}
+
+let COLOR = {
+	background: network != ENDPOINT.main ? "#332d2d" : "#25292e"
 }
 
 /// start

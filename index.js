@@ -590,6 +590,8 @@ async function reload_page(delay=0) {
 }
 
 window.addEventListener('load', function() {
+	document.body.style.backgroundColor = COLOR.background
+	
 	var page = "info"
 	var split = window.location.href.split('#')
 	var path = ""

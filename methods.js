@@ -145,7 +145,7 @@ function click_row(link) {
 	reload_page()
 }
 
-let empty_row = '<tr class="border-0" style="height:10px;"><td class="border-0 p-0" colspan="2" class="divider" style="background-color: #25292e;"></td></tr><tr class="border-0" style="height:10px;"><td class="border-0 p-0" colspan="2" class="divider" style="background-color: #25292e;"></td></tr>'
+let empty_row = `<tr class="border-0" style="height:10px;"><td class="border-0 p-0" colspan="2" class="divider" style="background-color: ${COLOR.background}"></td></tr>` + `<tr class="border-0" style="height:10px;"><td class="border-0 p-0" colspan="2" class="divider" style="background-color: ${COLOR.background}"></td></tr>`
 
 function row(values, link) {
 	var rows = ""
