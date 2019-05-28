@@ -298,8 +298,6 @@ async function reload_information() {
 		var deposited = asset(0, "EOS")
 		var matured = asset(0, "EOS")
 		var savings = asset(0, "BUCK")
-		var buck_balance = asset(0, "BUCK")
-		var eos_balance = asset(0, "EOS")
 
 		var maturities = []
 
@@ -337,8 +335,9 @@ async function reload_information() {
 			rows += empty_row
 			rows += row(["Savings amount", savings])
 		}
+
 		if (balance !== undefined) {
-			rows += row(["Personal balance", buck_balance])
+			rows += row(["Personal balance", balance.balance])
 		}
 
 		$(function () {$('[data-toggle="tooltip"]').tooltip()})
