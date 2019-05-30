@@ -347,6 +347,8 @@ async function reload_information() {
 			}
 			
 			matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
+			if (matured === deposited) { matured = "all" }
+
 			savings = asset(funds.savings_balance * price, "BUCK")
 
 			rows += row(["Deposited funds", `<span${maturities_tooltip}>${deposited} (${matured} matured)</span>`])
