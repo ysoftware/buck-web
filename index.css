@@ -69,3 +69,7 @@ button:focus {
         column-count: 3;
     }
 }
+
+.ual-auth-button {
+    height: 50px !important;
+}
