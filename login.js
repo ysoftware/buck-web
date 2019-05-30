@@ -60,15 +60,6 @@ async function show_price() {
 	price_label.innerHTML = `<span data-toggle="tooltip" title="Current Oracle's EOS price\nUpdated at ${date(stat.oracle_timestamp)}">$${(await price()) / 100}</span>`
 }
 
-function setup_user() {
-	console.log("hi", auth.accountName)
-	db.set_account(auth.accountName)
-	db.invalidate()
-
-	show_username()
-	reload_page()
-}
-
 function login() {
 	if (auth.isLoggedIn) {
 		auth.ual.logoutUser()

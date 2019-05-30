@@ -52,8 +52,15 @@ let auth = {
 	ual: undefined
 }
 
+function setup_user() {
+	db.set_account(auth.accountName)
+	db.invalidate()
+
+	show_username()
+	reload_page()
+}
+
 async function users_handler(users) {
-	console.log('logged in with ' + users.length)
 	if (users.length > 0) {
 		let user = users[users.length-1]
 		auth.isLoggedIn = true
