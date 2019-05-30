@@ -28,7 +28,7 @@ class Database {
 
 		this._cdps = new Data(30, async () => {
 			if (this.account === undefined) return []
-			let result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, account.name, '5', 'i64', 100)
+			let result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, account, '5', 'i64', 100)
 			if (result === undefined && result.rows.length == 1) return []
 			return result.rows
 		}, [])
@@ -47,14 +47,14 @@ class Database {
 
 		this._balance = new Data(30, async () => {
 			if (this.account === undefined) return undefined
-			let result = await getTable(TABLE.accounts, ACCOUNT.main, this.account.name)
+			let result = await getTable(TABLE.accounts, ACCOUNT.main, this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 
 		this._fund = new Data(30, async () => {
 			if (this.account === undefined) return undefined
-			let result = await getTable(TABLE.fund, ACCOUNT.main, ACCOUNT.main, this.account.name)
+			let result = await getTable(TABLE.fund, ACCOUNT.main, ACCOUNT.main, this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
@@ -68,13 +68,15 @@ class Database {
 
 		this._eos = new Data(30, async () => {
 			if (this.account === undefined) return undefined
-			let result = await getTable(TABLE.accounts, ACCOUNT.token, this.account.name)
+			let result = await getTable(TABLE.accounts, ACCOUNT.token, this.account)
+			console.log("hi", this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 	}
 
 	set_account(account) {
+		console.log("hi, setting account", account)
 		this.account = account
 	}
 
@@ -90,7 +92,7 @@ class Database {
 
 	async get_exchange_order() {
 		if (this.account === undefined) return undefined
-		let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account.name, '1', 'i64', 1)
+		let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account, '1', 'i64', 1)
 		if (exchange_result === undefined && exchange_result.rows.length == 0) return undefined
 		return exchange_result.rows[0]
 	}

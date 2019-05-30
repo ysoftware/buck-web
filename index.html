@@ -79,19 +79,9 @@
 				<span class="navbar-text text-white-50 mr-3" id="username_label"></span>
 			</span>
 		</span>
-
-		<div class="collapse navbar-collapse" style="max-width: 70px;" id="navbarTogglerDemo01">
-			<ul class="navbar-nav mr-0 ml-auto">
-				<li class="nav-item">&nbsp;</li>
-				<li class="nav-item">
-					<button type="button" class="btn btn-sm btn-outline-secondary" id="login_button"
-					onclick="login()">Logout</button>
-				</li>
-			</ul>
-		</div>
 	</nav>
 
-	<div class="container-fluid pb-5 mb-5" style="min-width: 650px !important">
+	<div class="container-fluid pb-5 mb-5">
 		<div id="alerts" class="position-absolute mr-4" style="position: absolute; z-index: 1; width: 40%; right: 0;"></div> 
 
 		<div class="row mt-4 mb-4">
@@ -562,6 +552,8 @@
 		<a class="navbar-text mr-2" href="https://t.me/Scruge_en"><u>Telegram</u></a>
 		<a class="navbar-text mr-2" href="https://medium.com/@dmitry.yunodo/buck-protocol-is-live-fef2cf5765d7"><u>Guides</u></a>
 		<a class="navbar-text mr-2" href="https://docs.google.com/document/d/17roIgpnPTnRArH5ioTrRx1Ri_2ISJJZtHx4X7BZhLUg/edit"><u>White Paper</u></a>
+
+		<button type="button" id="logout_button" class="btn btn-sm btn-outline-secondary ml-auto" onclick="login()">Log out</button>
 	</nav>
 
 	</body>

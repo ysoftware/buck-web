@@ -1,20 +1,19 @@
 async function show_username() {
 	let username_label = document.getElementById("username_label")
 	let info_view = document.getElementById("account_info")
-	let login_button = document.getElementById("login_button")
+	let logout_button = document.getElementById("logout_button")
 	logged_in = auth.accountName !== undefined
-	console.log(auth.accountName)
+	console.log('account: ', logged_in)
 
-	if (auth.accountName !== undefined) {
-		username_label.innerHTML = `<a href="${block_explorer}/account/${auth.accountName}">${account.name}</a>`
-		info_view.hidden = false
-		login_button.innerHTML = "Log out"
+	logout_button.hidden = !logged_in
+	info_view.hidden = !logged_in
+
+	if (logged_in) {
+		username_label.innerHTML = `<a href="${block_explorer}/account/${auth.accountName}">${auth.accountName}</a>`
 		await show_balance()
 	}
 	else {
 		username_label.innerHTML = ""
-		info_view.hidden = true
-		login_button.innerHTML = "Log in"
 	}
 	await show_price()
 	$(function () {$('[data-toggle="tooltip"]').tooltip()})
@@ -62,6 +61,7 @@ async function show_price() {
 }
 
 function setup_user() {
+	console.log("hi", auth.accountName)
 	db.set_account(auth.accountName)
 	db.invalidate()
 
@@ -71,9 +71,13 @@ function setup_user() {
 
 function login() {
 	if (auth.isLoggedIn) {
-		
+		auth.ual.logoutUser()
+		auth.isLoggedIn = false
+		auth.accountName = undefined
+		auth.user = undefined
 	}
 	else {
-		auth.ual.logoutUser()
+		auth.ual.loginUser()
 	}
+	init_page()
 }

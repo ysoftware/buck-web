@@ -33,11 +33,11 @@ let EVENT = {
 	input: 'change keydown keypress keyup mousedown click mouseup'
 }
 
-let network = ENDPOINT.main
-
 let ACCOUNT = {
 	main:"buckprotocol", eosio: "eosio", token: "eosio.token"
 }
+
+let network = ENDPOINT.main
 
 let COLOR = {
 	background: network != ENDPOINT.main ? "#332d2d" : "#25292e"
@@ -53,19 +53,19 @@ let auth = {
 }
 
 async function users_handler(users) {
+	console.log('logged in with ' + users.length)
 	if (users.length > 0) {
 		let user = users[users.length-1]
 		auth.isLoggedIn = true
 		auth.accountName = await user.getAccountName()
 		auth.user = user
-		setup_user()
 	}
 	else {
 		auth.isLoggedIn = false
 		auth.accountName = undefined
 		auth.user = undefined
-		setup_user()
 	}
+	setup_user()
 	reload_page()
 }
 

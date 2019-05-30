@@ -289,6 +289,9 @@ async function reload_cdps() {
 }
 
 async function reload_information() {
+
+	console.log('reload info')
+
 	let stats = await db.stat()
 	let funds = await db.fund()
 	let balance = await db.balance()
@@ -639,6 +642,8 @@ async function reload_page(delay=0) {
 	}
 
 	if (auth.accountName === undefined) { page = "info" }
+
+	console.log('reload page: ' + page)
 		
 	document.getElementById("info-container").hidden = page != "info"
 	document.getElementById("cdps-container").hidden = page != "cdps"
@@ -684,6 +689,8 @@ function init_page() {
 		}
 	}
 	if (auth.accountName === undefined) { page = "info" }
+
+	reload_page()
 
 	menu_select(document.getElementById(page), false)
 }
