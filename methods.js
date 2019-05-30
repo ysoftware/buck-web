@@ -130,7 +130,10 @@ async function cdp_view(cdp, show_controls=true) {
 function menu_select(sender, change_href=true) {
 	if (change_href) {
 		window.location.href = window.location.href.split('#')[0] + "#" + sender.id
-		$('#navbarTogglerDemo01').collapse('hide')
+		if (is_mobile()) {
+			$('#navbarTogglerDemo01').collapse('hide')
+			window.scrollTo(0, 0);
+		}
 	}
 	let all_list = Array.from(document.getElementById("menu_items").children)
 	all_list.forEach(s => {
@@ -180,18 +183,23 @@ function alert_transaction_error(error) {
 
 function alert_transaction(tx) {
 	var output = ""
+	var cpu = ""
 	var i = 0
-	while (true) {
-		let trace = tx.processed.action_traces[i]
-		if (trace === undefined) break
-		output += trace.console
-		i++
+	if (tx.transaction.processed !== undefined) {
+		cpu = ` (${tx.transaction.processed.receipt.cpu_usage_us} μs)`
+		while (true) {
+			let trace = tx.transaction.processed.action_traces[i]
+			if (trace === undefined) break
+			output += trace.console
+			i++
+		}
 	}
-	let cpu = ` (${tx.processed.receipt.cpu_usage_us} μs)`
+
 	if (output.length > 0) output = `<br/><br/>Console output:<br/>${ output.split(/\r\n|\r|\n/g).join("<br/>") }`
 	else output = ""
 	output = output.trim()
-	alert(`<a href="${block_explorer}/tx/${tx.transaction_id}">See transaction</a>${cpu}${output}`, "success", ALERT.long)
+
+	alert(`<a href="${block_explorer}/transaction/${tx.transactionId}">See transaction</a>${cpu}${output}`, "success", ALERT.long)
 
 }
 

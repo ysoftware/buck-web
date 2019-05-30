@@ -687,4 +687,13 @@ function init_page() {
 
 	reload_page()
 	menu_select(document.getElementById(page), false)
+
+	if (is_mobile()) {
+		document.getElementById('top_bar').classList.remove('sticky-top')
+		document.getElementById('bottom_bar').classList.remove('fixed-bottom')
+	}
+	else {
+		$('#navbarTogglerDemo01').collapse('show')
+		document.getElementById('sandwich_button').hidden = true
+	}
 }

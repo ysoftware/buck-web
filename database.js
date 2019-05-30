@@ -89,8 +89,9 @@ class Database {
 	async rex() { return await this._rex.get(this.reloadTime) }
 
 	async get_exchange_order() {
+			console.log(this.account)
 		if (this.account === undefined) return undefined
-		let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, account, '1', 'i64', 1)
+		let exchange_result = await getTable(TABLE.exchange, ACCOUNT.main, ACCOUNT.main, this.account, '1', 'i64', 1)
 		if (exchange_result === undefined && exchange_result.rows.length == 0) return undefined
 		return exchange_result.rows[0]
 	}
