@@ -55,9 +55,11 @@ let auth = {
 function setup_user() {
 	db.set_account(auth.accountName)
 	db.invalidate()
-
 	show_username()
 	reload_page()
+
+
+	console.log(auth.ual)
 }
 
 async function users_handler(users) {
@@ -77,7 +79,6 @@ async function users_handler(users) {
 }
 
 window.addEventListener('ual_ready', () => {
-	console.log("ual ready")
 	auth.ual = window.ual_create(network, "BUCK Protocol", 'ual_app', users_handler)
 	auth.ual.init()
 	init_page()
@@ -85,5 +86,8 @@ window.addEventListener('ual_ready', () => {
 
 ScatterJS.plugins(new ScatterEOS())
 let block_explorer = network.explorer
-let configDefaults = { httpEndpoint: network.protocol + "://" + network.host + ":" + network.port, debug: true, verbose: true }
+let configDefaults = { 
+	logger: { log: null, error: console.error },
+	httpEndpoint: network.protocol + "://" + network.host + ":" + network.port, debug: true, verbose: true 
+}
 let eos = ScatterJS.scatter.eos(network, Eos, configDefaults)

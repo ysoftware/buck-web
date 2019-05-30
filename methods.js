@@ -128,7 +128,10 @@ async function cdp_view(cdp, show_controls=true) {
 }
 
 function menu_select(sender, change_href=true) {
-	if (change_href) window.location.href = window.location.href.split('#')[0] + "#" + sender.id
+	if (change_href) {
+		window.location.href = window.location.href.split('#')[0] + "#" + sender.id
+		$('#navbarTogglerDemo01').collapse('hide')
+	}
 	let all_list = Array.from(document.getElementById("menu_items").children)
 	all_list.forEach(s => {
 		s.classList.remove("active")

@@ -69,14 +69,12 @@ class Database {
 		this._eos = new Data(30, async () => {
 			if (this.account === undefined) return undefined
 			let result = await getTable(TABLE.accounts, ACCOUNT.token, this.account)
-			console.log("hi", this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 	}
 
 	set_account(account) {
-		console.log("hi, setting account", account)
 		this.account = account
 	}
 

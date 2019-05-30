@@ -1,11 +1,12 @@
+function is_mobile() { return navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i) }
+
 async function show_username() {
 	let username_label = document.getElementById("username_label")
 	let info_view = document.getElementById("account_info")
 	let logout_button = document.getElementById("logout_button")
 	logged_in = auth.accountName !== undefined
-	console.log('account: ', logged_in)
 
-	logout_button.hidden = !logged_in
+	logout_button.hidden = !logged_in || is_mobile()
 	info_view.hidden = !logged_in
 
 	if (logged_in) {

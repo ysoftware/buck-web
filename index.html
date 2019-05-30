@@ -66,7 +66,7 @@
 	</div>
 
 	<!-- Layout -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<nav class="navbar navbar-lg navbar-dark bg-dark sticky-top">
 		<button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 		<ul class="navbar-nav mr-auto"><a class="navbar-brand" href="#">BUCK Protocol</a></ul>
 
@@ -85,35 +85,35 @@
 		<div id="alerts" class="position-absolute mr-4" style="position: absolute; z-index: 1; width: 40%; right: 0;"></div> 
 
 		<div class="row mt-4 mb-4">
-			<div class="col-2 mr-2 mb-5" style="width: 190px; min-width: 190px;">
-				<ul class="list-group list-group-mine dark" id="menu_items">
-					<button type="button" id="info" onclick="menu_select(this);reload_page()"
-						class="list-group-item list-group-item-dark list-group-item-action"
-						>Info</button>
-						<div id="logged_in_actions" hidden>
-							<button type="button" id="transfer" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>Transfer</button>
-							<button type="button" id="funds" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>Funds</button>
-							<button type="button" id="cdps" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>My CDPs</button>
-							<button type="button" id="open" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>Open CDP</button>
-							<button type="button" id="savings" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark list-group-item-action"
-								>Savings</button>
-							<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>Exchange</button>
-							<button type="button" id="redeem" onclick="menu_select(this);reload_page()"
-								class="list-group-item list-group-item-dark  list-group-item-action"
-								>Redeem</button>
-						</div>
-				</ul>
+				<div class="collapse navbar-collapse col-2 mr-2 mb-5"  id="navbarTogglerDemo01" style="width: 190px; min-width: 190px;">
+					<ul class="list-group list-group-mine dark" id="menu_items">
+						<button type="button" id="info" onclick="menu_select(this);reload_page()"
+							class="list-group-item list-group-item-dark list-group-item-action"
+							>Info</button>
+							<div id="logged_in_actions" hidden>
+								<button type="button" id="transfer" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>Transfer</button>
+								<button type="button" id="funds" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>Funds</button>
+								<button type="button" id="cdps" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>My CDPs</button>
+								<button type="button" id="open" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>Open CDP</button>
+								<button type="button" id="savings" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark list-group-item-action"
+									>Savings</button>
+								<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>Exchange</button>
+								<button type="button" id="redeem" onclick="menu_select(this);reload_page()"
+									class="list-group-item list-group-item-dark  list-group-item-action"
+									>Redeem</button>
+							</div>
+					</ul>
 			</div>
 			
 			<div class="col">
