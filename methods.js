@@ -160,6 +160,16 @@ function row(values, link) {
 	else return `<tr>${rows}</tr>`
 }
 
+function style_login_button() {
+	let button = document.getElementById('ual-button')
+	console.log("styling, button")
+	button.id = ""
+	button.classList.remove('ual-button-gen')
+	button.classList.add('btn')
+	button.classList.add('btn-outline-secondary')
+	button.innerHTML = "Log in"
+}
+
 function alert_transaction_error(error) {
 	if (error.message !== undefined) {
 		alert(`Transaction did not proceed: ${error.message}`, "warning", ALERT.long)

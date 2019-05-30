@@ -696,4 +696,6 @@ function init_page() {
 		$('#navbarTogglerDemo01').collapse('show')
 		document.getElementById('sandwich_button').hidden = true
 	}
+
+	style_login_button()
 }
