@@ -33,7 +33,7 @@ let EVENT = {
 	input: 'change keydown keypress keyup mousedown click mouseup'
 }
 
-let network = ENDPOINT.jungle
+let network = ENDPOINT.main
 
 let ACCOUNT = {
 	main:"buckprotocol", eosio: "eosio", token: "eosio.token"
@@ -45,27 +45,38 @@ let COLOR = {
 
 /// start
 
+let auth = {
+	isLoggedIn: false,
+	accountName: undefined,
+	user: undefined,
+	ual: undefined
+}
+
+async function users_handler(users) {
+	if (users.length > 0) {
+		let user = users[users.length-1]
+		auth.isLoggedIn = true
+		auth.accountName = await user.getAccountName()
+		auth.user = user
+		setup_user()
+	}
+	else {
+		auth.isLoggedIn = false
+		auth.accountName = undefined
+		auth.user = undefined
+		setup_user()
+	}
+	reload_page()
+}
+
+window.addEventListener('ual_ready', () => {
+	console.log("ual ready")
+	auth.ual = window.ual_create(network, "BUCK Protocol", 'ual_app', users_handler)
+	auth.ual.init()
+	init_page()
+})
+
 ScatterJS.plugins(new ScatterEOS())
 let block_explorer = network.explorer
 let configDefaults = { httpEndpoint: network.protocol + "://" + network.host + ":" + network.port, debug: true, verbose: true }
 let eos = ScatterJS.scatter.eos(network, Eos, configDefaults)
-
-ScatterJS.connect('BUCK Protocol', { network })
-	.then(connected => { 
-		if (!connected) {
-			alert("Unable to connect to Scatter", "danger", ALERT.long)
-			reload_page()
-		}
-		else {
-			setup_user() 
-		}
-	})
-	.catch(error => { 
-		// reload_page() - don't show scatter login
-		alert(error.message, "danger", ALERT.long)
-	})
-
-/// login data
-
-var logged_in = false
-var account = undefined

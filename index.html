@@ -29,6 +29,7 @@
 	<script src="include/bootstrap.min.js"></script>
 
 	<!-- Main -->
+	<script type="text/javascript" src="include/ual.js?v=104"></script>
 	<script type="text/javascript" src="setup.js?v=104"></script>
 	<script type="text/javascript" src="math.js?v=104"></script>
 	<script type="text/javascript" src="chain.js?v=104"></script>
@@ -84,7 +85,7 @@
 				<li class="nav-item">&nbsp;</li>
 				<li class="nav-item">
 					<button type="button" class="btn btn-sm btn-outline-secondary" id="login_button"
-					onclick="login()">…</button>
+					onclick="login()">Logout</button>
 				</li>
 			</ul>
 		</div>
@@ -135,9 +136,8 @@
 
 					<div class="row mt-2" id="login_panel" hidden>
 						<div>
-						<h2 class="text-white-50 mt-0">Log in with Scatter</h2><br/>
-						<span class="text-white-50 mt-2">Support for more wallets is coming soon</span><br/>
-						<button type="button" class="btn btn-outline-secondary mt-3" onclick="login()">Log in</button>
+						<h2 class="text-white-50 mt-0">Log in</h2><br/>
+						<div id="ual_app"></div>
 					</div>
 					</div>
 				</div>

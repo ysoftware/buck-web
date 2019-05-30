@@ -1,7 +1,7 @@
 // Make actions
 
 async function prepare_redeem() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let value = document.getElementById('redeem_field').value
 	let amount = parseFloat(value)
 	if (isNaN(amount)) { alert("Incorrect input", "danger"); return }
@@ -18,7 +18,7 @@ async function prepare_redeem() {
 
 async function prepare_changeicr() {
 	let id = document.getElementById('change_cdp_id').innerHTML
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let icr_field = document.getElementById("change_icr_field")
 	let icr = parseInt(icr_field.value)
 	if (isNaN(icr)) { alert("Incorrect input", "danger"); return }
@@ -30,7 +30,7 @@ async function prepare_changeicr() {
 }
 
 async function prepare_remove_debt() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let id = document.getElementById('change_cdp_id').innerHTML
 
 	// to-do validate
@@ -39,7 +39,7 @@ async function prepare_remove_debt() {
 }
 
 async function prepare_exchange_cancel() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	
 	// to-do validate
 
@@ -47,7 +47,7 @@ async function prepare_exchange_cancel() {
 }
 
 async function prepare_change() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let id = document.getElementById('change_cdp_id').innerHTML
 
 	let fund = await db.fund()
@@ -78,7 +78,7 @@ async function prepare_change() {
 }
 
 async function prepare_close(id) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	// to-do validate
 
@@ -86,7 +86,7 @@ async function prepare_close(id) {
 }
 
 async function prepare_exchange(id) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let to_buck = id !== "exchange-buck-field"
 	let value = parseFloat(document.getElementById(id).value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
@@ -121,7 +121,7 @@ async function prepare_deposit_exchange() {
 }
 
 async function prepare_savings(save) {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let save_field = document.getElementById("save_field")
 	let unsave_field = document.getElementById("unsave_field")
 	var quantity = asset((save ? save_field : unsave_field).value, "BUCK")
@@ -150,7 +150,7 @@ async function prepare_savings(save) {
 }
 
 async function prepare_transfer() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let quantity_field = document.getElementById("transfer_quantity_field")
 	let memo_field = document.getElementById("transfer_memo_field")
 	let to_field = document.getElementById("transfer_to_field")
@@ -166,7 +166,7 @@ async function prepare_transfer() {
 
 async function prepare_deposit(id) {
 
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let value = parseFloat(document.getElementById(id).value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 	let quantity = asset(value, "EOS")
@@ -177,7 +177,7 @@ async function prepare_deposit(id) {
 }
 
 async function prepare_withdraw() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let value = parseFloat(document.getElementById("withdraw-field").value)
 	if (isNaN(value)) { alert("Incorrect input", "danger"); return }
 
@@ -199,7 +199,7 @@ async function prepare_withdraw() {
 }
 
 async function prepare_withdraw_exchange() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let fund = await db.fund()
 	if (fund === undefined) return
 	if (amount(fund.exchange_balance) == 0) { alert("Exchange fund is empty", "warning", ALERT.medium); return }
@@ -210,7 +210,7 @@ async function prepare_withdraw_exchange() {
 }
 
 async function prepare_open() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	var dcr_input = document.getElementById("open_dcr_field").value
 	if (dcr_input === "") { dcr_input = 0 }
@@ -258,7 +258,7 @@ async function prepare_open() {
 // Load View
 
 async function reload_cdps() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let table = document.getElementById("cdps_table")
 	table.innerHTML = ""
 
@@ -309,7 +309,9 @@ async function reload_information() {
 		return
 	}
 
-	if (account !== undefined) {
+	document.getElementById("login_panel").hidden = auth.accountName !== undefined
+	
+	if (auth.accountName !== undefined) {
 		let price = await savings_price()
 		var deposited = asset(0, "EOS")
 		var matured = asset(0, "EOS")
@@ -362,13 +364,12 @@ async function reload_information() {
 			alert("Unable to load data", "danger", ALERT.long)
 		}
 	}
-	document.getElementById("login_panel").hidden = account !== undefined
 
 	table.innerHTML = rows
 }
 
 async function reload_funds() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	let eos_balance = document.getElementById('funds_eos_balance')
 	let rex_matured_balance = document.getElementById('funds_rex_balance')
@@ -407,7 +408,7 @@ async function reload_funds() {
 }
 
 async function reload_exchange() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	let balance = await db.balance()
 	let funds = await db.fund()
@@ -448,7 +449,7 @@ async function reload_exchange() {
 
 async function reload_change(str_id) {
 	let id = parseInt(str_id)
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 
 	let container = document.getElementById('change_cdp_container')
 	let id_container = document.getElementById('change_cdp_id')
@@ -517,12 +518,12 @@ async function reload_change(str_id) {
 }
 
 async function reload_transfer() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let balance = await db.balance()
 }
 
 async function reload_savings() {
-	if (account === undefined) { alert("Please, log in with Scatter", "warning"); return }
+	if (auth.accountName === undefined) { alert("Please, log in with Scatter", "warning"); return }
 	let balance = await db.balance()
 	let tax = await db.tax()
 	let funds = await db.fund()
@@ -623,16 +624,7 @@ function unsubscribe_events() {
 
 async function reload_page(delay=0) {
 	unsubscribe_events()
-
-	if (delay !== 0) {
-		await sleep(delay)
-	}
-	
-	await db.rex()
-	await db.stat()
-	await db.tax()
-	await db.fund()
-	await db.balance()
+	if (delay !== 0) await sleep(delay)
 
 	var page = "info"
 	let id = undefined
@@ -646,8 +638,8 @@ async function reload_page(delay=0) {
 		}
 	}
 
-	if (account === undefined) { page = "info" }
-
+	if (auth.accountName === undefined) { page = "info" }
+		
 	document.getElementById("info-container").hidden = page != "info"
 	document.getElementById("cdps-container").hidden = page != "cdps"
 	document.getElementById("open-container").hidden = page != "open"
@@ -671,21 +663,27 @@ async function reload_page(delay=0) {
 	}
 
 	let logged_in_menu = document.getElementById('logged_in_actions')
-	logged_in_menu.hidden = account === undefined
+	logged_in_menu.hidden = auth.accountName === undefined
 
 	show_username()
 	menu_select(document.getElementById(page), false)
 }
 
-window.addEventListener('load', function() {
+function init_page() {
 	document.body.style.backgroundColor = COLOR.background
 
 	var page = "info"
+	let id = undefined
 	var split = window.location.href.split('#')
 	var path = ""
 	if (split.length >= 2) { 
 		page = split[1]
-		if (page.includes("-")) { page = page.split("-")[0] }
+		if (page.includes("-")) {
+			id = page.split("-")[1]
+			page = page.split("-")[0]
+		}
 	}
+	if (auth.accountName === undefined) { page = "info" }
+
 	menu_select(document.getElementById(page), false)
-})
+}

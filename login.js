@@ -2,10 +2,11 @@ async function show_username() {
 	let username_label = document.getElementById("username_label")
 	let info_view = document.getElementById("account_info")
 	let login_button = document.getElementById("login_button")
-	logged_in = account !== undefined
+	logged_in = auth.accountName !== undefined
+	console.log(auth.accountName)
 
-	if (account !== undefined) {
-		username_label.innerHTML = `<a href="${block_explorer}/account/${account.name}">${account.name}</a>`
+	if (auth.accountName !== undefined) {
+		username_label.innerHTML = `<a href="${block_explorer}/account/${auth.accountName}">${account.name}</a>`
 		info_view.hidden = false
 		login_button.innerHTML = "Log out"
 		await show_balance()
@@ -61,31 +62,18 @@ async function show_price() {
 }
 
 function setup_user() {
-	if (ScatterJS.scatter.identity !== null && ScatterJS.scatter.identity !== false) {
-		account = ScatterJS.scatter.identity.accounts.find(x => x.blockchain === 'eos')
-		db.set_account(account)
-		db.invalidate()
-	}
+	db.set_account(auth.accountName)
+	db.invalidate()
+
 	show_username()
 	reload_page()
 }
 
 function login() {
-	if (logged_in) {
-		ScatterJS.forgetIdentity()
-		account = undefined
-		logged_in = false
-		reload_page()
+	if (auth.isLoggedIn) {
+		
 	}
 	else {
-		alert("Awaiting Scatter response…", "primary")
-		ScatterJS.login().then(identity => {
-			setup_user()
-			alert(`Logged in as <b>${identity.accounts.find(x => x.blockchain === 'eos').name }</b>`, "success", ALERT.medium)
-		})
-		.catch(error => { 
-			alert(error.message, "warning")
-			reload_page()
-		})
+		auth.ual.logoutUser()
 	}
 }
