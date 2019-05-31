@@ -75,7 +75,7 @@ async function cdp_view(cdp, show_controls=true) {
 	var dcr = ""
 	let cdp_dcr = await get_dcr(cdp)
 	if (!(cdp_dcr == Infinity || isNaN(cdp_dcr))) {
-		dcr = `<span data-toggle="tooltip" title="Debt Collateralization Ratio\nCalculated as: Collateral * Price / Debt\nCDP will be partially liquidated if this value goes below 150%"><span class="align-middle" style="font-size: 20px;">${cdp_dcr}%</span> <span class="text-secondary align-middle mr-3" style="font-size: 18px;">DCR</span></span>`
+		dcr = `<span data-toggle="tooltip" title="Debt Collateralization Ratio\nCalculated as: Collateral * Price / Debt\n\nCDP will be partially liquidated\nif this value goes below 150%"><span class="align-middle" style="font-size: 20px;">${cdp_dcr}%</span> <span class="text-secondary align-middle mr-3" style="font-size: 18px;">DCR</span></span>`
 	}
 
 	var icr = ""
@@ -98,7 +98,7 @@ async function cdp_view(cdp, show_controls=true) {
 	let output = `
 		<div class="card text-white bg-dark mb-3">
 		<div class="card-body p-0">
-			<span class="float-right position-static mt-2 mr-3 text-muted" style="font-size: 25px; opacity: 0.2;" data-toggle="tooltip" title="CDP Identifier.\nSpecify this value \nwhen creating requests\nin command line."><b>#${cdp.id}</b></span>
+			<span class="float-right position-static mt-2 mr-3 text-muted" style="font-size: 25px; opacity: 0.2;" data-toggle="tooltip" title="CDP Identifier\nSpecify this value when\ncreating requests in command line"><b>#${cdp.id}</b></span>
 
 			<ul class="list-group">
 				${badge}

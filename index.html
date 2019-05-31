@@ -71,12 +71,12 @@
 		<ul class="navbar-nav mr-auto"><a class="navbar-brand" href="#">BUCK Protocol</a></ul>
 
 		<span class="ml-auto mr-0">
-			<span class="navbar-text text-white-50 mr-3" id="top_eos_price"></span>
-			<span id="account_info" hidden>
-				<span class="navbar-text text-white-50 mr-3" id="top_buck_balance"></span>
-				<span class="navbar-text text-white-50 mr-3" id="top_savings_balance" hidden></span>
-				<span class="navbar-text text-white-50 mr-3" id="top_fund_balance"></span>
-				<span class="navbar-text text-white-50 mr-3" id="username_label"></span>
+			<span class="navbar-text text-white" id="top_eos_price"></span>
+			<span id="account_info" class="ml-2" hidden>
+				<span class="text-white-50 navbar-text mr-2" id="top_buck_balance"></span>
+				<span class="text-white-50 navbar-text mr-2" id="top_savings_balance" hidden></span>
+				<span class="text-white-50 navbar-text mr-2" id="top_fund_balance"></span>
+				<span class="navbar-text mr-2" id="username_label"></span>
 			</span>
 		</span>
 	</nav>
@@ -137,7 +137,7 @@
 										<span class="text-white-50">or</span>
 									</div>
 									<div class="col pl-0">
-										<input style="display:inline; max-width: 190px;" autocomplete="off" type="text" class="form-control mb-2" maxlength="12" id="view_account_field" placeholder="Account name"/>
+										<input style="display:inline; max-width: 190px;" autocomplete="off" type="text" class="form-control mb-2" maxlength="12" id="view_account_field" placeholder="Account name" value="buckliqprovi" />
 
 										<button type="button" class="btn btn-outline-secondary" onclick="view_account()">View account</button>
 									</div>
@@ -267,7 +267,7 @@
 										<button type="button" class="btn btn-dark" onclick="prepare_change()">Change</button>
 									</div>
 									<div class="col pt-1">
-										<span class="text-white-50 align-middle" id="change_new_dcr" hidden></span>
+										<span class="text-white align-middle" id="change_new_dcr" hidden></span>
 									</div>
 								</div>
 

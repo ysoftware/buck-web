@@ -37,7 +37,7 @@ async function show_balance() {
 	}
 
 	let eos_funds = asset(await convert(amount(fundbalance), false), "EOS")
-	fund_label.innerHTML = `<span data-toggle="tooltip" title="Approximate worth of your deposited funds\nActual amount is: ${fundbalance}">FUND: ${eos_funds}</span>`
+	fund_label.innerHTML = `<span data-toggle="tooltip" title="Approximate worth of your deposited funds\nActual amount is: ${fundbalance}">FUN ${eos_funds}</span>`
 
 	var buckbalance = asset(0, "BUCK")
 	if (balance !== undefined) {
@@ -45,11 +45,11 @@ async function show_balance() {
 	}
 
 	let total_buck = buckbalance
-	buck_balance_label.innerHTML = `<span data-toggle="tooltip" title="Your personal $BUCK balance">BALANCE: ${total_buck}</span>`
+	buck_balance_label.innerHTML = `<span data-toggle="tooltip" title="Your personal $BUCK balance">BAL ${total_buck}</span>`
 
 	if (savings > 0) {
 		let savings_buck = asset(savings * (await savings_price()), "BUCK")
-		top_savings_balance.innerHTML = `<span data-toggle="tooltip" title="Approximate amount of $BUCK you have in savings">SAVINGS: ${savings_buck}</span>`
+		top_savings_balance.innerHTML = `<span data-toggle="tooltip" title="Approximate amount of $BUCK you have in savings">SAV ${savings_buck}</span>`
 		top_savings_balance.hidden = false
 	}
 }

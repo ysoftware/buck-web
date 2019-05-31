@@ -510,8 +510,11 @@ async function reload_change(str_id) {
 		else if (!isNaN(new_dcr) && new_dcr > 0) {
 			new_dcr_label.innerHTML = "New DCR is too low"
 		}
+		else if (amount(new_cdp.debt) < 0) {
+			new_dcr_label.innerHTML = "Debt can not go negative"
+		}
 		else {
-			new_dcr_label.innerHTML = "Just adding collateral"
+			new_dcr_label.innerHTML = "Just updating collateral"
 		}
 	}
 
@@ -663,8 +666,6 @@ async function reload_page(delay=0) {
 		case "open": reload_open(); break
 		case "redeem": reload_redeem(); break
 	}
-
-	console.log(auth.user === undefined)
 
 	Array.from(document.getElementsByClassName("account_only")).forEach(x => x.hidden = auth.accountName === undefined)
 	Array.from(document.getElementsByClassName("auth_only")).forEach(x => x.hidden = auth.user === undefined)
