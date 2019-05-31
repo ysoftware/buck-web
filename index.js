@@ -354,7 +354,7 @@ async function reload_information() {
 			rows += row(["Deposited funds", `<span${maturities_tooltip}>${deposited}${matured}</span>`])
 			rows += empty_row
 			rows += row(["Savings amount", savings])
-		}
+		}	
 
 		if (balance !== undefined) {
 			rows += row(["Personal balance", balance.balance])
