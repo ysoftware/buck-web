@@ -345,7 +345,7 @@ async function reload_information() {
 			if (amount(deposited) > 0) {
 				matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
 				if (matured === deposited) { matured = "all" }
-				matured = `(${matured} matured)`
+				matured = ` (${matured} matured)`
 			}
 
 			let price = await savings_price()
