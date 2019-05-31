@@ -312,11 +312,6 @@ async function reload_information() {
 	document.getElementById("login_panel").hidden = auth.accountName !== undefined
 	
 	if (auth.accountName !== undefined) {
-		let price = await savings_price()
-		var deposited = asset(0, "EOS")
-		var matured = asset(0, "EOS")
-		var savings = asset(0, "BUCK")
-
 		var maturities = []
 
 		if (eos !== undefined) {
@@ -324,7 +319,7 @@ async function reload_information() {
 		}
 
 		if (funds !== undefined) {
-			deposited = asset(await convert(amount(funds.balance)), "EOS")
+			let deposited = asset(await convert(amount(funds.balance)), "EOS")
 
 			var matured_eos = await convert(funds.matured_rex / 10000)
 			var unprocessed_matured_eos = 0
@@ -345,13 +340,18 @@ async function reload_information() {
 			if (maturities.length > 0) {
 				maturities_tooltip = ` data-toggle="tooltip" title="Maturities:\n${maturities.join("\n")}"`
 			}
-			
-			matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
-			if (matured === deposited) { matured = "all" }
 
-			savings = asset(funds.savings_balance * price, "BUCK")
+			var matured = ""
+			if (amount(deposited) > 0) {
+				matured = asset(matured_eos + unprocessed_matured_eos, "EOS")
+				if (matured === deposited) { matured = "all" }
+				matured = `(${matured} matured)`
+			}
 
-			rows += row(["Deposited funds", `<span${maturities_tooltip}>${deposited} (${matured} matured)</span>`])
+			let price = await savings_price()
+			let savings = asset(funds.savings_balance * price, "BUCK")
+
+			rows += row(["Deposited funds", `<span${maturities_tooltip}>${deposited}${matured}</span>`])
 			rows += empty_row
 			rows += row(["Savings amount", savings])
 		}
