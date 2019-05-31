@@ -90,29 +90,27 @@
 						<button type="button" id="info" onclick="menu_select(this);reload_page()"
 							class="list-group-item list-group-item-dark list-group-item-action"
 							>Info</button>
-							<div id="logged_in_actions" hidden>
-								<button type="button" id="transfer" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									>Transfer</button>
-								<button type="button" id="funds" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									>Funds</button>
-								<button type="button" id="cdps" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									>My CDPs</button>
-								<button type="button" id="open" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									>Open CDP</button>
-								<button type="button" id="savings" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark list-group-item-action"
-									>Savings</button>
-								<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									>Exchange</button>
-								<button type="button" id="redeem" onclick="menu_select(this);reload_page()"
-									class="list-group-item list-group-item-dark  list-group-item-action"
-									hidden>Redeem</button>
-							</div>
+							<button type="button" id="transfer" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								>Transfer</button>
+							<button type="button" id="funds" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								>Funds</button>
+							<button type="button" id="cdps" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only  list-group-item-action"
+								>My CDPs</button>
+							<button type="button" id="open" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								>Open CDP</button>
+							<button type="button" id="savings" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								>Savings</button>
+							<button type="button" id="exchange" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								>Exchange</button>
+							<button type="button" id="redeem" onclick="menu_select(this);reload_page()"
+								class="list-group-item list-group-item-dark account_only auth_only list-group-item-action"
+								hidden>Redeem</button>
 					</ul>
 			</div>
 			
@@ -125,12 +123,27 @@
 					<tbody id="info_table_body"></tbody>
 					</table></div>
 
-					<div class="row mt-5" id="login_panel" hidden>
+					<div class="row mt-5" id="login_panel" hidden>	
 						<div>
-						<h4 class="text-white mb-3">Authentication</h4>
-						<h5 class="text-white-50 mb-4">Log in with your EOS wallet of choice</h5>
-						<div id="ual_app"></div>
-					</div>
+							<h4 class="text-white mb-3">Authentication</h4>
+							<h5 class="text-white-50 mb-4">Log in with your EOS wallet or view an account without authentication</h5>
+
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col pl-0" style="max-width: 90px">
+										<span id="ual_app"></span>
+									</div>
+									<div class="col pl-0" style="max-width: 40px">
+										<span class="text-white-50">or</span>
+									</div>
+									<div class="col pl-0">
+										<input style="display:inline; max-width: 190px;" autocomplete="off" type="text" class="form-control mb-2" maxlength="12" id="view_account_field" placeholder="Account name"/>
+
+										<button type="button" class="btn btn-outline-secondary" onclick="view_account()">View account</button>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -166,7 +179,7 @@
 				<!-- Cdps -->
 				<div id="cdps-container" class="container-fluid" hidden>
 					<div class="row"><h4 style="color: white" class="mb-4">My CDP</h4></div>
-					<div class="row"><h5 class="mb-4 text-secondary">List of CDPs opened by you</h5></div>
+					<div class="row"><h5 class="mb-4 text-secondary">List of CDPs opened by this account</h5></div>
 					<div class="row mt-3">
 						<div class="col pl-0">
 							<span class="text-white-50" id="my_cdp_nope" hidden>You don't have any CDPs</span>
@@ -555,7 +568,7 @@
 		<a class="navbar-text mr-2" href="https://medium.com/@dmitry.yunodo/buck-protocol-is-live-fef2cf5765d7"><u>Guides</u></a>
 		<a class="navbar-text mr-2" href="https://docs.google.com/document/d/17roIgpnPTnRArH5ioTrRx1Ri_2ISJJZtHx4X7BZhLUg/edit"><u>White Paper</u></a>
 
-		<button type="button" id="logout_button" class="btn btn-sm btn-outline-secondary ml-auto" onclick="login()">Log out</button>
+		<button type="button" id="logout_button" class="btn btn-sm btn-outline-secondary ml-auto" onclick="logout()">Log out</button>
 	</nav>
 
 	</body>

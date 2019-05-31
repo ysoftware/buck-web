@@ -57,9 +57,6 @@ function setup_user() {
 	db.invalidate()
 	show_username()
 	reload_page()
-
-
-	console.log(auth.ual)
 }
 
 async function users_handler(users) {

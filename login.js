@@ -61,15 +61,21 @@ async function show_price() {
 	price_label.innerHTML = `<span data-toggle="tooltip" title="Current Oracle's EOS price\nUpdated at ${date(stat.oracle_timestamp)}">$${(await price()) / 100}</span>`
 }
 
-function login() {
-	if (auth.isLoggedIn) {
-		auth.ual.logoutUser()
+function view_account() {
+	if (!auth.isLoggedIn) {
+		let name = document.getElementById('view_account_field').value
 		auth.isLoggedIn = false
-		auth.accountName = undefined
+		auth.accountName = name
 		auth.user = undefined
+		setup_user()
+		init_page()
 	}
-	else {
-		auth.ual.loginUser()
-	}
+}
+
+function logout() {
+	auth.ual.logoutUser()
+	auth.isLoggedIn = false
+	auth.accountName = undefined
+	auth.user = undefined
 	init_page()
 }

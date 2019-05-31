@@ -89,7 +89,7 @@ async function cdp_view(cdp, show_controls=true) {
 	}
 
 	var controls = ""
-	if (show_controls) {
+	if (show_controls && auth.user !== undefined) {
 		controls = `<li class="list-group-item pt-0 border-0 pr-0" style="background:transparent;">
 					<button type="button" id="change-${cdp.id}" style="" onclick="menu_select(this);reload_page()" class="btn btn-outline-secondary btn-sm">Reparametrize</button>
 					${close_button}</li>`
@@ -139,7 +139,7 @@ function menu_select(sender, change_href=true) {
 	all_list.forEach(s => {
 		s.classList.remove("active")
 	})
-	let logged_in_items = Array.from(document.getElementById("logged_in_actions").children)
+	let logged_in_items = Array.from(document.getElementsByClassName("account_only"))
 	logged_in_items.forEach(s => {
 		s.classList.remove("active")
 	})
@@ -162,12 +162,13 @@ function row(values, link) {
 
 function style_login_button() {
 	let button = document.getElementById('ual-button')
-	console.log("styling, button")
-	button.id = ""
-	button.classList.remove('ual-button-gen')
-	button.classList.add('btn')
-	button.classList.add('btn-outline-secondary')
-	button.innerHTML = "Log in"
+		if (button != null) {
+		button.id = ""
+		button.classList.remove('ual-button-gen')
+		button.classList.add('btn')
+		button.classList.add('btn-outline-secondary')
+		button.innerHTML = "Log in"
+	}
 }
 
 function alert_transaction_error(error) {
