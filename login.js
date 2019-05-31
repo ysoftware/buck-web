@@ -73,7 +73,9 @@ function view_account() {
 }
 
 function logout() {
-	auth.ual.logoutUser()
+	if (auth.user !== undefined) {
+		auth.ual.logoutUser()
+	}
 	auth.isLoggedIn = false
 	auth.accountName = undefined
 	auth.user = undefined
