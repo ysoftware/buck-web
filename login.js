@@ -47,11 +47,13 @@ async function show_balance() {
 	let total_buck = buckbalance
 	buck_balance_label.innerHTML = `<span data-toggle="tooltip" title="Your personal $BUCK balance">BAL ${total_buck}</span>`
 
+	let savings_buck = asset(savings * (await savings_price()), "BUCK")
+	let savings_text = ""
 	if (savings > 0) {
-		let savings_buck = asset(savings * (await savings_price()), "BUCK")
-		top_savings_balance.innerHTML = `<span data-toggle="tooltip" title="Approximate amount of $BUCK you have in savings">SAV ${savings_buck}</span>`
-		top_savings_balance.hidden = false
+		savings_text = `<span data-toggle="tooltip" title="Approximate amount of $BUCK you have in savings">SAV ${savings_buck}</span>`
 	}
+	top_savings_balance.innerHTML = savings_text
+	top_savings_balance.hidden = savings === 0
 }
 
 async function show_price() {
