@@ -10,6 +10,7 @@ async function runTransaction(actions) {
 	}
 	catch (error) {
 		alert_transaction_error(error)
+		reload_page(0.25)
 		return false
 	}
 }

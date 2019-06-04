@@ -171,24 +171,21 @@ function style_login_button() {
 	}
 }
 
-function alert_transaction_error(error) {
-	if (error.message !== undefined) {
-		alert(`Transaction did not proceed: ${error.message}`, "warning", ALERT.long)
-		return
+function retrieve_failure(error) {
+	if (error.cause !== undefined) {
+		return error.cause.message.replace("assertion failure with message: ", "")
 	}
-	try {
-		let e = JSON.parse(error)
-		var msg = e.error.details[0].message.replace("assertion failure with message: ", "")
+	return undefined
+}
 
-		var output = ""
-		if (e.error.details[1] !== undefined) {
-			output = e.error.details[1].message.replace("pending console output: ", "")
-			if (output.length > 0) output = `<br/><br/>Console output:<br/>${ output.split(/\r\n|\r|\n/g).join("<br/>") }`
-		}
-		alert("Transaction error:<br/>" + msg + output, "danger", ALERT.long)
+function alert_transaction_error(error) {
+	let failure = retrieve_failure(error)
+
+	if (failure !== undefined) {
+		alert(`Transaction error:<br/>${failure}`, "danger", ALERT.long)
 	}
-	catch (e) {
-		alert(`Could not make transaction: ${e.message}`, "danger", ALERT.medium)
+	else {
+		alert(`Transaction did not proceed`, "warning", ALERT.long)
 	}
 }
 
