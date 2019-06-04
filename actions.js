@@ -5,7 +5,7 @@ async function runTransaction(actions) {
 		let tx = await auth.user.signTransaction({ actions: actions }, { broadcast: true })
 		alert_transaction(tx)
 		db.invalidate()
-		reload_page(0.5)
+		reload_page(0.75)
 		return true
 	}
 	catch (error) {
