@@ -1,5 +1,5 @@
 async function runTransaction(actions) {
-	alert("Awaiting signature…", "primary", ALERT.medium)
+	alert("Requesting signature…", "primary", ALERT.medium)
 	try {
 		if (!Array.isArray(actions)) { actions = [actions] }
 		let tx = await auth.user.signTransaction({ actions: actions }, { broadcast: true })

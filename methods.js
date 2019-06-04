@@ -210,8 +210,7 @@ function alert_transaction(tx) {
 	else output = ""
 	output = output.trim()
 
-	alert(`<a href="${block_explorer}/transaction/${tx.transactionId}">See transaction</a>${cpu}${output}`, "success", ALERT.long)
-
+	alert(`Transaction success<br/><a href="${block_explorer}/transaction/${tx.transactionId}">See in block explorer</a>${cpu}${output}`, "success", ALERT.long)
 }
 
 function alert(text, type="success", timeout=ALERT.short) {
