@@ -65,9 +65,9 @@ async function show_price() {
 
 function view_account() {
 	if (!auth.isLoggedIn) {
-		let name = document.getElementById('view_account_field').value
-		auth.isLoggedIn = false
+		let name = document.getElementById('view_account_field').value.toLowerCase()
 		auth.accountName = name
+		auth.isLoggedIn = false
 		auth.user = undefined
 		setup_user()
 		init_page()
