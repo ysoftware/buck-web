@@ -88,3 +88,5 @@ let configDefaults = {
 	httpEndpoint: network.protocol + "://" + network.host + ":" + network.port, debug: true, verbose: true 
 }
 let eos = ScatterJS.scatter.eos(network, Eos, configDefaults)
+
+setInterval(() => { db.invalidate(); reload_page() }, 30000)
