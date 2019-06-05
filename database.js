@@ -6,9 +6,10 @@ class Data {
 		this.updater = updater
 	}
 
-	async get(reloadTime) {
-		let next_reload = this.updated + this.expiration
-		if (this.object === undefined || next_reload < reloadTime) {
+	async get() {
+		let next_reload = this.updated + this.expiration * 1000
+		console.log(this.object === undefined || next_reload < now())
+		if (this.object === undefined || next_reload < now()) {
 			this.object = await this.updater.call()
 
 			if (this.object !== undefined) {
@@ -26,47 +27,47 @@ class Database {
 		this.reloadTime = now()
 		this.account = account
 
-		this._cdps = new Data(30, async () => {
+		this._cdps = new Data(0, async () => {
 			if (this.account === undefined) return []
 			let result = await getTable(TABLE.cdp, ACCOUNT.main, ACCOUNT.main, account, '5', 'i64', 100)
 			if (result === undefined && result.rows.length == 1) return []
 			return result.rows
 		}, [])
 
-		this._stat = new Data(30, async () => {
+		this._stat = new Data(10, async () => {
 			let result = await getTable(TABLE.stat, ACCOUNT.main, "BUCK")
 			if (result === undefined) return undefined
 			return result.rows[0]
 		})
 
-		this._tax = new Data(30, async () => {
+		this._tax = new Data(10, async () => {
 			let result = await getTable(TABLE.taxation, ACCOUNT.main)
 			if (result === undefined) return undefined
 			return result.rows[0]
 		})
 
-		this._balance = new Data(30, async () => {
+		this._balance = new Data(10, async () => {
 			if (this.account === undefined) return undefined
 			let result = await getTable(TABLE.accounts, ACCOUNT.main, this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 
-		this._fund = new Data(30, async () => {
+		this._fund = new Data(10, async () => {
 			if (this.account === undefined) return undefined
 			let result = await getTable(TABLE.fund, ACCOUNT.main, ACCOUNT.main, this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 
-		this._rex = new Data(30, async () => {
+		this._rex = new Data(10, async () => {
 			if (this.account === undefined) return undefined
 			let result = await await getTable(TABLE.rexpool, ACCOUNT.eosio)
 			if (result === undefined && result.rows.length == 1) return undefined
 			return result.rows[0]
 		})
 
-		this._eos = new Data(30, async () => {
+		this._eos = new Data(10, async () => {
 			if (this.account === undefined) return undefined
 			let result = await getTable(TABLE.accounts, ACCOUNT.token, this.account)
 			if (result === undefined && result.rows.length == 1) return undefined
@@ -80,13 +81,13 @@ class Database {
 
 	invalidate() { this.init(this.account) }
 
-	async stat() { return await this._stat.get(this.reloadTime) }
-	async cdps() { return await this._cdps.get(this.reloadTime) }
-	async fund() { return await this._fund.get(this.reloadTime) }
-	async tax() { return await this._tax.get(this.reloadTime) }
-	async balance() { return await this._balance.get(this.reloadTime) }
-	async eos() { return await this._eos.get(this.reloadTime) }
-	async rex() { return await this._rex.get(this.reloadTime) }
+	async stat() { return await this._stat.get() }
+	async cdps() { return await this._cdps.get() }
+	async fund() { return await this._fund.get() }
+	async tax() { return await this._tax.get() }
+	async balance() { return await this._balance.get() }
+	async eos() { return await this._eos.get() }
+	async rex() { return await this._rex.get() }
 
 	async get_exchange_order() {
 			console.log(this.account)
