@@ -293,6 +293,7 @@ async function reload_information() {
 	let funds = await db.fund()
 	let balance = await db.balance()
 	let eos = await db.eos()
+	let eos_price = await price()
 
 	let table = document.getElementById("info_table_body")
 	table.innerHTML = ""
@@ -315,7 +316,11 @@ async function reload_information() {
 		var maturities = []
 
 		if (eos !== undefined) {
-			rows += row(["Personal EOS balance", eos.balance])
+			var usd_balance = ""
+			if (amount(eos.balance) > 0 && network == ENDPOINT.main) {
+				usd_balance = ` ($${ fixed(amount(eos.balance) / 100 * eos_price, 2) })`
+			}
+			rows += row(["Personal EOS balance", `${eos.balance}${usd_balance}`])
 		}
 
 		if (funds !== undefined) {
